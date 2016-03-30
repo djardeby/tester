@@ -12,6 +12,8 @@ public class StandardBoard implements Board {
 	private long OCCUPIED = 0L;
 	private long whitePawnBoard = 0L;
 	private long blackPawnBoard = 0L;
+	private long whiteKnightBoard = 0L;
+	private long blackKnightBoard = 0L;
 	private boolean whiteToMove = true;
 	private boolean hasMoved = true;
 	private long blackPieces;
@@ -19,12 +21,20 @@ public class StandardBoard implements Board {
 	private long whitePieces;
 	private final Pawns blackPawns = new Pawns(Colour.BLACK, blackPawnBoard, getWhitePieces());
 
+	public StandardBoard(long... boards) {
+		setWhitePawnBoard(boards[0]);
+		setBlackPawnBoard(boards[1]);
+		setWhiteKnightBoard(boards[2]);
+		setBlackKnightBoard(boards[3]);
+	}
+
 	public String moves() {
 		StringBuilder moves = new StringBuilder();
 		Pawns pawns = isWhiteToMove() ? whitePawns : blackPawns;
 		moves.append(pawns.findAllMoves(getEmpty()));
 		return moveToAlgebra(moves);
 	}
+
 
 
 	public String moveToAlgebra(final StringBuilder move) {
@@ -105,10 +115,10 @@ public class StandardBoard implements Board {
 			if (((whitePawnBoard >> i) & 1) == 1) {
 				chessBoard[i / 8][i % 8] = "P";
 			}
-/*			if (((WN >> i) & 1) == 1) {
+			if (((whiteKnightBoard >> i) & 1) == 1) {
 				chessBoard[i / 8][i % 8] = "N";
 			}
-			if (((WB >> i) & 1) == 1) {
+/*			if (((WB >> i) & 1) == 1) {
 				chessBoard[i / 8][i % 8] = "B";
 			}
 			if (((WR >> i) & 1) == 1) {
@@ -123,10 +133,10 @@ public class StandardBoard implements Board {
 			if (((blackPawnBoard >> i) & 1) == 1) {
 				chessBoard[i / 8][i % 8] = "p";
 			}
-/*			if (((BN >> i) & 1) == 1) {
+			if (((blackKnightBoard >> i) & 1) == 1) {
 				chessBoard[i / 8][i % 8] = "n";
 			}
-			if (((BB >> i) & 1) == 1) {
+/*			if (((BB >> i) & 1) == 1) {
 				chessBoard[i / 8][i % 8] = "b";
 			}
 			if (((BR >> i) & 1) == 1) {
@@ -146,4 +156,19 @@ public class StandardBoard implements Board {
 		return stringRepresentation;
 	}
 
+	public long getWhiteKnightBoard() {
+		return whiteKnightBoard;
+	}
+
+	public void setWhiteKnightBoard(long whiteKnightBoard) {
+		this.whiteKnightBoard = whiteKnightBoard;
+	}
+
+	public long getBlackKnightBoard() {
+		return blackKnightBoard;
+	}
+
+	public void setBlackKnightBoard(long blackKnightBoard) {
+		this.blackKnightBoard = blackKnightBoard;
+	}
 }

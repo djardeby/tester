@@ -4,7 +4,7 @@ import a.pair.of.red.socks.board.Colour;
 
 import static a.pair.of.red.socks.utils.Constants.*;
 
-public class Pawns implements Piece {
+public class Pawns extends Piece {
 
 	private final Colour colour;
 	private long pawnBoard;
@@ -44,20 +44,7 @@ public class Pawns implements Piece {
 		return boardToMoves(colour.getDirection(),pawnMoves,1);
 	}
 
-	private StringBuilder boardToMoves(int sidesteps, long pawnMoves, int forwardsteps) {
-		StringBuilder moves = new StringBuilder();
-		long possibility = pawnMoves & ~(pawnMoves - 1);
-		while (possibility != 0) {
-			int index = Long.numberOfTrailingZeros(possibility);
-			moves.append(index % 8 + forwardsteps);
-			moves.append(index / 8 + sidesteps);
-			moves.append(index % 8);
-			moves.append(index / 8);
-			pawnMoves &= ~possibility;
-			possibility = pawnMoves & ~(pawnMoves - 1);
-		}
-		return moves;
-	}
+
 
 	public Colour getColour() {
 		return colour;
