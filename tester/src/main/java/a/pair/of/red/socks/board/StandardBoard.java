@@ -12,12 +12,12 @@ public class StandardBoard implements Board {
 	private long OCCUPIED = 0L;
 	private long whitePawnBoard = 0L;
 	private long blackPawnBoard = 0L;
-	private final Pawns whitePawns = new Pawns(Colour.WHITE, whitePawnBoard, getBlackPieces());
-	private final Pawns blackPawns = new Pawns(Colour.BLACK, blackPawnBoard, getWhitePieces());
 	private boolean whiteToMove = true;
 	private boolean hasMoved = true;
 	private long blackPieces;
+	private final Pawns whitePawns = new Pawns(Colour.WHITE, whitePawnBoard, getBlackPieces());
 	private long whitePieces;
+	private final Pawns blackPawns = new Pawns(Colour.BLACK, blackPawnBoard, getWhitePieces());
 
 	public String moves() {
 		StringBuilder moves = new StringBuilder();
@@ -91,7 +91,7 @@ public class StandardBoard implements Board {
 
 	public long getWhitePieces() {
 		if (hasMoved)
-			whitePieces=whitePawnBoard;
+			whitePieces = whitePawnBoard;
 		return whitePieces;
 	}
 

@@ -3,7 +3,6 @@ package a.pair.of.red.socks.pieces;
 import a.pair.of.red.socks.board.Colour;
 
 import static a.pair.of.red.socks.utils.Constants.*;
-import static a.pair.of.red.socks.utils.Constants.FILE_H;
 
 public class Pawns implements Piece {
 
