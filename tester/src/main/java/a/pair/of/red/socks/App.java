@@ -1,13 +1,14 @@
 package a.pair.of.red.socks;
 
-/**
- * Hello world!
- *
- */
-public class App 
+import a.pair.of.red.socks.board.Board;
+import a.pair.of.red.socks.board.BoardType;
+import a.pair.of.red.socks.factory.BoardFactory;
+
+public class App
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
+		BoardFactory factory = new BoardFactory();
+		Board board = factory.initBoard(BoardType.StandardBoard);
     }
 }
