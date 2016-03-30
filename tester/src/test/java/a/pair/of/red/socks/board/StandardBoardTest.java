@@ -99,9 +99,7 @@ public class StandardBoardTest {
 		sut.setBlackPawnBoard(blackPawn);
 		sut.setWhitePawnBoard(whitePawn);
 		sut.setWhiteToMove(false);
-		logger.debug(sut.toString());
 		String actual = sut.moves();
-		logger.debug(sut.toString());
 		assertEquals("Returnerar attack drag för blockerad svart.", expected, actual);
 	}
 }
