@@ -81,9 +81,9 @@ public class StandardBoardTest {
 	@Test
 	public void pawnsAttackSidewaysWhite() {
 		StandardBoard sut = new StandardBoard();
-		String expected = "a6a7h2h3a6b7h2g3";
-		long blackPawn = Long.parseLong("000000000" + "00000001" + "01000000" + "00000000" + "00000000" + "00000000" + "00000010" + "10000000", 2);
-		long whitePawn = Long.parseLong("000000000" + "10000000" + "00000000" + "00000000" + "00000000" + "00000001" + "00000000" + "00000000", 2);
+		String expected = "a6a7c4c5a6b7h2g3";
+		long blackPawn = Long.parseLong("000000000" + "00000001" + "11000000" + "00000000" + "00000000" + "00000000" + "00000010" + "10000000", 2);
+		long whitePawn = Long.parseLong("000000000" + "10000000" + "00000000" + "00000100" + "00000000" + "00000001" + "00000000" + "00000000", 2);
 		sut.setBlackPawnBoard(blackPawn);
 		sut.setWhitePawnBoard(whitePawn);
 		String actual = sut.moves();
@@ -93,13 +93,15 @@ public class StandardBoardTest {
 	@Test
 	public void pawnsAttackSidewaysBlack() {
 		StandardBoard sut = new StandardBoard();
-		String expected = "a7b6h3g2";
-		long whitePawn  = Long.parseLong("000000000" + "11000001" + "00000000" + "00000000" + "00000000" + "00000011" + "00000010" + "10000000", 2);
-		long blackPawn=   Long.parseLong("000000000" + "00000000" + "10000000" + "00000000" + "00000000" + "00000000" + "00000001" + "00000000", 2);
+		String expected = "f5f4a7b6h3g2";
+		long whitePawn = Long.parseLong("000000000" + "11000001" + "00000000" + "00000000" + "00000000" + "00000011" + "00000010" + "10000000", 2);
+		long blackPawn = Long.parseLong("000000000" + "00000000" + "10000000" + "00000000" + "00100000" + "00000000" + "00000001" + "00000000", 2);
 		sut.setBlackPawnBoard(blackPawn);
 		sut.setWhitePawnBoard(whitePawn);
 		sut.setWhiteToMove(false);
+		logger.debug(sut.toString());
 		String actual = sut.moves();
+		logger.debug(sut.toString());
 		assertEquals("Returnerar attack drag för blockerad svart.", expected, actual);
 	}
 }

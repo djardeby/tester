@@ -1,138 +1,33 @@
 package a.pair.of.red.socks.board;
 
+import a.pair.of.red.socks.pieces.Pawns;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+
 public class StandardBoard implements Board {
 	private static final Logger logger = LoggerFactory.getLogger(StandardBoard.class);
-	private static final long RANK_4 = 1095216660480L;
-	private static final long RANK_5 = 4278190080L;
-	private static final long FILE_A = 72340172838076673L;
-	private static final long FILE_H = -9187201950435737472L;
-	private final long EMPTY = 0L;
-	private final long OCCUPIED = 0L;
+	private long EMPTY = 0L;
+	private long OCCUPIED = 0L;
 	private long whitePawnBoard = 0L;
 	private long blackPawnBoard = 0L;
+	private final Pawns whitePawns = new Pawns(Colour.WHITE, whitePawnBoard, getBlackPieces());
+	private final Pawns blackPawns = new Pawns(Colour.BLACK, blackPawnBoard, getWhitePieces());
 	private boolean whiteToMove = true;
+	private boolean hasMoved = true;
+	private long blackPieces;
+	private long whitePieces;
 
 	public String moves() {
-
-		String moves = isWhiteToMove() ? moveWhitePawnsOneStep() : moveBlackPawnsOneStep();
-		moves += isWhiteToMove() ? moveWhitePawnsTwoSteps() : moveBlackPawnsTwoSteps();
-		moves += isWhiteToMove() ? moveWhitePawnsAttackEast() : moveBlackPawnsAttackEast();
-		moves += isWhiteToMove() ? moveWhitePawnsAttackWest() :  moveBlackPawnsAttackWest();
+		StringBuilder moves = new StringBuilder();
+		Pawns pawns = isWhiteToMove() ? whitePawns : blackPawns;
+		moves.append(pawns.findAllMoves(getEmpty()));
 		return moveToAlgebra(moves);
 	}
 
-	private String moveBlackPawnsOneStep() {
-		String moves = "";
-		long EMPTY = getEmpty();
-		long pawnMoves = (blackPawnBoard << 8) & EMPTY;
-		long possibility = pawnMoves & ~(pawnMoves - 1);
-		while (possibility != 0) {
-			int index = Long.numberOfTrailingZeros(possibility);
-			moves += "" + (index / 8 - 1) + (index % 8) + (index / 8) + (index % 8);
-			pawnMoves &= ~possibility;
-			possibility = pawnMoves & ~(pawnMoves - 1);
-		}
-		return moves;
-	}
 
-	private String moveBlackPawnsTwoSteps() {
-		String moves = "";
-		long EMPTY = getEmpty();
-		long pawnMoves = (blackPawnBoard << 16) & RANK_5 & EMPTY & (EMPTY << 8);
-		long possibility = pawnMoves & ~(pawnMoves - 1);
-		while (possibility != 0) {
-			int index = Long.numberOfTrailingZeros(possibility);
-			moves += "" + (index / 8 - 2) + (index % 8) + (index / 8) + (index % 8);
-			pawnMoves &= ~possibility;
-			possibility = pawnMoves & ~(pawnMoves - 1);
-		}
-		return moves;
-	}
-
-	private String moveBlackPawnsAttackEast() {
-		String moves = "";
-		long pawnMoves = (blackPawnBoard << 9) & getOccupied()&~FILE_H;
-		long possibility = pawnMoves & ~(pawnMoves - 1);
-		while (possibility != 0) {
-			int index = Long.numberOfTrailingZeros(possibility);
-			moves += "" + (index / 8 - 1) + (index % 8-1) + (index / 8) + (index % 8);
-			pawnMoves &= ~possibility;
-			possibility = pawnMoves & ~(pawnMoves - 1);
-		}
-		return moves;
-	}
-
-	private String moveBlackPawnsAttackWest() {
-		String moves = "";
-		long pawnMoves = (blackPawnBoard << 7) & getOccupied()&~FILE_A;
-		long possibility = pawnMoves & ~(pawnMoves - 1);
-		while (possibility != 0) {
-			int index = Long.numberOfTrailingZeros(possibility);
-			moves += "" + (index / 8 - 1) + (index % 8+1) + (index / 8) + (index % 8);
-			pawnMoves &= ~possibility;
-			possibility = pawnMoves & ~(pawnMoves - 1);
-		}
-		return moves;
-	}
-
-	private String moveWhitePawnsOneStep() {
-		String moves = "";
-		long EMPTY = getEmpty();
-		long pawnMoves = (whitePawnBoard >> 8) & EMPTY;
-		long possibility = pawnMoves & ~(pawnMoves - 1);
-		while (possibility != 0) {
-			int index = Long.numberOfTrailingZeros(possibility);
-			moves += "" + (index / 8 + 1) + (index % 8) + (index / 8) + (index % 8);
-			pawnMoves &= ~possibility;
-			possibility = pawnMoves & ~(pawnMoves - 1);
-		}
-		return moves;
-	}
-
-
-	private String moveWhitePawnsTwoSteps() {
-		String moves = "";
-		long pawnMoves = (whitePawnBoard >> 16) & RANK_4 & EMPTY & (EMPTY >> 8);
-		long possibility = pawnMoves & ~(pawnMoves - 1);
-		while (possibility != 0) {
-			int index = Long.numberOfTrailingZeros(possibility);
-			moves += "" + (index / 8 + 2) + (index % 8) + (index / 8) + (index % 8);
-			pawnMoves &= ~possibility;
-			possibility = pawnMoves & ~(pawnMoves - 1);
-		}
-		return moves;
-	}
-
-	private String moveWhitePawnsAttackEast() {
-		String moves = "";
-		long pawnMoves = (whitePawnBoard >> 7) & blackPawnBoard&~FILE_A;
-		long possibility = pawnMoves & ~(pawnMoves - 1);
-		while (possibility != 0) {
-			int index = Long.numberOfTrailingZeros(possibility);
-			moves += "" + (index / 8 +1) + (index % 8-1) + (index / 8) + (index % 8);
-			pawnMoves &= ~possibility;
-			possibility = pawnMoves & ~(pawnMoves - 1);
-		}
-		return moves;
-	}
-
-	private String moveWhitePawnsAttackWest() {
-		String moves = "";
-		long pawnMoves = (whitePawnBoard >> 9) & blackPawnBoard&~FILE_H;
-		long possibility = pawnMoves & ~(pawnMoves - 1);
-		while (possibility != 0) {
-			int index = Long.numberOfTrailingZeros(possibility);
-			moves += "" + (index / 8 +1) + (index % 8+1) + (index / 8) + (index % 8);
-			pawnMoves &= ~possibility;
-			possibility = pawnMoves & ~(pawnMoves - 1);
-		}
-		return moves;
-	}
-
-	public String moveToAlgebra(final String move) {
+	public String moveToAlgebra(final StringBuilder move) {
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < move.length(); i += 4) {
 			int start = (Character.getNumericValue(move.charAt(i)) * 8) + Character.getNumericValue(move.charAt(i + 1));
@@ -142,6 +37,7 @@ public class StandardBoard implements Board {
 			builder.append((char) ('a' + (end % 8)));
 			builder.append((char) ('8' - (end / 8)));
 		}
+
 		return builder.toString();
 	}
 
@@ -151,6 +47,9 @@ public class StandardBoard implements Board {
 
 	public void setWhitePawnBoard(long whitePawnBoard) {
 		this.whitePawnBoard = whitePawnBoard;
+		whitePawns.setPawnBoard(whitePawnBoard);
+		whitePawns.setOtherPieces(getBlackPieces());
+		blackPawns.setOtherPieces(getWhitePieces());
 	}
 
 	public long getBlackPawnBoard() {
@@ -159,6 +58,9 @@ public class StandardBoard implements Board {
 
 	public void setBlackPawnBoard(long blackPawnBoard) {
 		this.blackPawnBoard = blackPawnBoard;
+		blackPawns.setPawnBoard(blackPawnBoard);
+		blackPawns.setOtherPieces(getWhitePieces());
+		whitePawns.setOtherPieces(getBlackPieces());
 	}
 
 	public boolean isWhiteToMove() {
@@ -170,10 +72,78 @@ public class StandardBoard implements Board {
 	}
 
 	private long getEmpty() {
-		return ~(getWhitePawnBoard() | getBlackPawnBoard());
+		if (hasMoved)
+			EMPTY = ~(getWhitePawnBoard() | getBlackPawnBoard());
+		return EMPTY;
 	}
+
 	private long getOccupied() {
-		return (getWhitePawnBoard() | getBlackPawnBoard());
+		if (hasMoved)
+			OCCUPIED = (getWhitePieces() | getBlackPieces());
+		return OCCUPIED;
+	}
+
+	public long getBlackPieces() {
+		if (hasMoved)
+			blackPieces = blackPawnBoard;
+		return blackPieces;
+	}
+
+	public long getWhitePieces() {
+		if (hasMoved)
+			whitePieces=whitePawnBoard;
+		return whitePieces;
+	}
+
+	@Override
+	public String toString() {
+		String chessBoard[][] = new String[8][8];
+		for (int i = 0; i < 64; i++) {
+			chessBoard[i / 8][i % 8] = " ";
+		}
+		for (int i = 0; i < 64; i++) {
+			if (((whitePawnBoard >> i) & 1) == 1) {
+				chessBoard[i / 8][i % 8] = "P";
+			}
+/*			if (((WN >> i) & 1) == 1) {
+				chessBoard[i / 8][i % 8] = "N";
+			}
+			if (((WB >> i) & 1) == 1) {
+				chessBoard[i / 8][i % 8] = "B";
+			}
+			if (((WR >> i) & 1) == 1) {
+				chessBoard[i / 8][i % 8] = "R";
+			}
+			if (((WQ >> i) & 1) == 1) {
+				chessBoard[i / 8][i % 8] = "Q";
+			}
+			if (((WK >> i) & 1) == 1) {
+				chessBoard[i / 8][i % 8] = "K";
+			}*/
+			if (((blackPawnBoard >> i) & 1) == 1) {
+				chessBoard[i / 8][i % 8] = "p";
+			}
+/*			if (((BN >> i) & 1) == 1) {
+				chessBoard[i / 8][i % 8] = "n";
+			}
+			if (((BB >> i) & 1) == 1) {
+				chessBoard[i / 8][i % 8] = "b";
+			}
+			if (((BR >> i) & 1) == 1) {
+				chessBoard[i / 8][i % 8] = "r";
+			}
+			if (((BQ >> i) & 1) == 1) {
+				chessBoard[i / 8][i % 8] = "q";
+			}
+			if (((BK >> i) & 1) == 1) {
+				chessBoard[i / 8][i % 8] = "k";
+			}*/
+		}
+		String stringRepresentation = "\n";
+		for (int i = 0; i < 8; i++) {
+			stringRepresentation += Arrays.toString(chessBoard[i]) + "\n";
+		}
+		return stringRepresentation;
 	}
 
 }
