@@ -30,8 +30,8 @@ public class StandardBoard implements Board {
 	public String moveToAlgebra(final StringBuilder move) {
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < move.length(); i += 4) {
-			int start = (Character.getNumericValue(move.charAt(i)) * 8) + Character.getNumericValue(move.charAt(i + 1));
-			int end = (Character.getNumericValue(move.charAt(i + 2)) * 8) + Character.getNumericValue(move.charAt(i + 3));
+			int start = (Character.getNumericValue(move.charAt(i+1)) * 8) + Character.getNumericValue(move.charAt(i));
+			int end = (Character.getNumericValue(move.charAt(i + 3)) * 8) + Character.getNumericValue(move.charAt(i + 2));
 			builder.append((char) ('a' + (start % 8)));
 			builder.append((char) ('8' - (start / 8)));
 			builder.append((char) ('a' + (end % 8)));

@@ -17,61 +17,46 @@ public class Pawns implements Piece {
 	}
 
 	public String findAllMoves(final long empty) {
-		return movePawnsOneStep(empty) + movePawnsTwoSteps(empty) + moveWhitePawnsAttackEast() + moveWhitePawnsAttackWest();
+		return movePawnsOneStep(empty).append(movePawnsTwoSteps(empty)).append(pawnsAttackEast()).append(pawnsAttackWest()).toString();
 	}
 
-	private String movePawnsOneStep(final long empty) {
+	private StringBuilder movePawnsOneStep(final long empty) {
 		long pawnMoves = (Colour.WHITE.equals(getColour()) ? (getPawnBoard() >> 8) : (getPawnBoard() << 8)) & empty;
-		return boardToMoves(getColour().getDirection(), pawnMoves);
+		return boardToMoves(getColour().getDirection(), pawnMoves, 0);
 	}
 
-	private String movePawnsTwoSteps(final long empty) {
+	private StringBuilder movePawnsTwoSteps(final long empty) {
 
 		long pawnMoves = (Colour.WHITE.equals(getColour()) ? (getPawnBoard() >> 16) & RANK_4 & empty >> 8
 				: (getPawnBoard() << 16) & RANK_5 & empty << 8) & empty;
-		return boardToMoves(2 * getColour().getDirection(), pawnMoves);
+		return boardToMoves(2 * getColour().getDirection(), pawnMoves, 0);
 	}
 
 
-	private String moveWhitePawnsAttackEast() {
+	private StringBuilder pawnsAttackEast() {
 		String moves = "";
 		long pawnMoves = (Colour.WHITE.equals(colour) ? pawnBoard >> 7 : pawnBoard << 9) & getOtherPieces() & ~FILE_A;
-		long possibility = pawnMoves & ~(pawnMoves - 1);
-		while (possibility != 0) {
-			int index = Long.numberOfTrailingZeros(possibility);
-			moves += "" + (index / 8 + colour.getDirection()) + (index % 8 - 1) + (index / 8) + (index % 8);
-			pawnMoves &= ~possibility;
-			possibility = pawnMoves & ~(pawnMoves - 1);
-		}
-		return moves;
+		return boardToMoves(colour.getDirection(),pawnMoves,-1);
 	}
 
-	private String moveWhitePawnsAttackWest() {
-		String moves = "";
+	private StringBuilder pawnsAttackWest() {
 		long pawnMoves = (Colour.WHITE.equals(colour) ? pawnBoard >> 9 : pawnBoard << 7) & getOtherPieces() & ~FILE_H;
-		long possibility = pawnMoves & ~(pawnMoves - 1);
-		while (possibility != 0) {
-			int index = Long.numberOfTrailingZeros(possibility);
-			moves += "" + (index / 8 + colour.getDirection()) + (index % 8 + 1) + (index / 8) + (index % 8);
-			pawnMoves &= ~possibility;
-			possibility = pawnMoves & ~(pawnMoves - 1);
-		}
-		return moves;
+		return boardToMoves(colour.getDirection(),pawnMoves,1);
 	}
 
-	private String boardToMoves(int steps, long pawnMoves) {
+	private StringBuilder boardToMoves(int sidesteps, long pawnMoves, int forwardsteps) {
 		StringBuilder moves = new StringBuilder();
 		long possibility = pawnMoves & ~(pawnMoves - 1);
 		while (possibility != 0) {
 			int index = Long.numberOfTrailingZeros(possibility);
-			moves.append(index / 8 + steps);
+			moves.append(index % 8 + forwardsteps);
+			moves.append(index / 8 + sidesteps);
 			moves.append(index % 8);
 			moves.append(index / 8);
-			moves.append(index % 8);
 			pawnMoves &= ~possibility;
 			possibility = pawnMoves & ~(pawnMoves - 1);
 		}
-		return moves.toString();
+		return moves;
 	}
 
 	public Colour getColour() {
