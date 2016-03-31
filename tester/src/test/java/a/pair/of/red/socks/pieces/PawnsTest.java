@@ -1,6 +1,6 @@
-package a.pair.of.red.socks.board;
+package a.pair.of.red.socks.pieces;
 
-import a.pair.of.red.socks.pieces.Pawns;
+import a.pair.of.red.socks.board.Colour;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
