@@ -261,15 +261,5 @@ public class BoardFactory {
 		}
 	}
 
-	private static long destinationBoard(String move) {
-		int possition = (Character.getNumericValue(move.charAt(2)) * 8) + (Character.getNumericValue(move.charAt(3)));
-		return 1L << possition;
-	}
-
-	private static long startingBoard(String move) {
-		int from = (Character.getNumericValue(move.charAt(0)) * 8) + (Character.getNumericValue(move.charAt(1)));
-		return 1L << from;
-	}
-
 
 }
