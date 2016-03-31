@@ -1,5 +1,6 @@
 package a.pair.of.red.socks.board;
 
+import a.pair.of.red.socks.pieces.Knights;
 import a.pair.of.red.socks.pieces.Pawns;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,9 +18,9 @@ public class StandardBoard implements Board {
 	private boolean whiteToMove = true;
 	private boolean hasMoved = true;
 	private long blackPieces;
-	private final Pawns whitePawns = new Pawns(Colour.WHITE, whitePawnBoard, getBlackPieces());
+	private final Pawns whitePawns = new Pawns(Colour.WHITE, whitePawnBoard, 0L, 0L);
 	private long whitePieces;
-	private final Pawns blackPawns = new Pawns(Colour.BLACK, blackPawnBoard, getWhitePieces());
+	private final Pawns blackPawns = new Pawns(Colour.BLACK, blackPawnBoard, 0L, 0L);
 
 	public StandardBoard(long... boards) {
 		setWhitePawnBoard(boards[0]);
@@ -31,13 +32,16 @@ public class StandardBoard implements Board {
 	public String moves() {
 		StringBuilder moves = new StringBuilder();
 		Pawns pawns = isWhiteToMove() ? whitePawns : blackPawns;
+		Knights knights = new Knights(Colour.WHITE,whiteKnightBoard,0L,0L);
 		moves.append(pawns.findAllMoves(getEmpty()));
-		return moveToAlgebra(moves);
+		moves.append(knights.findAllMoves(getEmpty()));
+		logger.debug("Moves: {}", moves.toString());
+		return moveToAlgebra(moves.toString());
 	}
 
 
 
-	public String moveToAlgebra(final StringBuilder move) {
+	public String moveToAlgebra(final String move) {
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < move.length(); i += 4) {
 			int start = (Character.getNumericValue(move.charAt(i+1)) * 8) + Character.getNumericValue(move.charAt(i));
