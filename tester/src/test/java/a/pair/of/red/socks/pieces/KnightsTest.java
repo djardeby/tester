@@ -30,10 +30,11 @@ public class KnightsTest {
 	@Test
 	public void findAllMoves() throws Exception {
 		StandardBoard board = (StandardBoard) BoardFactory.initBoard(BoardType.StandardBoard);
-		board.setWhitePawnBoard(0L);
-		board.setBlackPawnBoard(0L);
+//		board.setWhitePawnBoard(0L);
+//		board.setBlackPawnBoard(0L);
+		assert board != null;
 		logger.debug("Nytt bräde {}", board.toString());
-//		logger.debug("Nytt bräde {}", board.moves());
+		logger.debug("Nytt bräde {}", board.moves().length()/4);
 	}
 
 	@Test
@@ -47,18 +48,18 @@ public class KnightsTest {
 
 	@Test
 	public void whiteKnightsAttackOnlyBlack() {
-		String expected = "3321416033524162335441533345332541223314412033123321";
+		String expected = "416033524162335441533345332541223314412033123321";
 		long knightsBoardWhite = Long.parseLong("000000000" + "00000000" + "00000000" + "00000000" + "00001000" + "00000000" + "00010000" + "00000000", 2);
 		long knightsBoardBlack = Long.parseLong("000000000" + "00000000" + "00000000" + "00000000" + "00000000" + "00000000" + "00000100" + "00000000", 2);
-		Knights knights = new Knights(Colour.BLACK, knightsBoardWhite,knightsBoardWhite,knightsBoardBlack);
+		Knights knights = new Knights(Colour.WHITE, knightsBoardWhite,knightsBoardWhite,knightsBoardBlack);
 		String actual = knights.findAllMoves(~(knightsBoardWhite|knightsBoardBlack));
 		assertEquals("Felaktiga drag för springare.", expected, actual);
 	}
 
 	@Test
 	public void knightsDontMoveOutsideBoard() {
-		String expected = "0715072677567765";
-		long knightsBoardWhite = makeLong("100000001" + "00000000" + "00000000" + "00000000" + "00000000" + "00000000" + "00000000" + "00000000");
+		String expected = "07150726002100127062705177567765";
+		long knightsBoardWhite = makeLong("100000001" + "00000000" + "00000000" + "00000000" + "00000000" + "00000000" + "00000000" + "10000001");
 		logger.debug("Hörnen: {}",Long.toBinaryString(knightsBoardWhite));
 //		long knightsBoardBlack = Long.parseLong("000000000" + "00000000" + "00000000" + "00000000" + "00000000" + "00000000" + "00000000" + "00000000", 2);
 		Knights knights = new Knights(Colour.BLACK, knightsBoardWhite,knightsBoardWhite,0L);
