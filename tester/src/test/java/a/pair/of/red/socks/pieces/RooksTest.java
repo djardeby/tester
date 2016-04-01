@@ -48,7 +48,7 @@ public class RooksTest {
 */
 		board.setBlackQueenBoard(rooks.lineAttacks((RANK_6|RANK_2|RANK_1),4,4));
 		board.setWhitePawnBoard(RANK_6);
-		logger.debug(board.toString());
+		logger.debug("Board: {}",board.toString());
 	}
 
 }
