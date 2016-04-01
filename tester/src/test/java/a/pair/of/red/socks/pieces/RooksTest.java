@@ -37,17 +37,16 @@ public class RooksTest {
 //		rooks.lineAttacks(0L,0,0);
 
 		StandardBoard board = new StandardBoard();
-/*
-		for (int i = 0; i < FILE_ATTACK.length; i++) {
+/*		for (int i = 0; i < FILE_ATTACK.length; i++) {
 			for (int j = 0; j < FILE_ATTACK[i].length; j++) {
 					board.setBlackPawnBoard(FILE_ATTACK[i][j][0]);
 					board.setBlackQueenBoard(FILE_ATTACK[i][j][1]);
 					logger.debug(board.toString());
 			}
-		}
-*/
-		board.setBlackQueenBoard(rooks.lineAttacks((RANK_6|RANK_2|RANK_1),4,4));
-		board.setWhitePawnBoard(RANK_6);
+		}*/
+		board.setBlackRookBoard(34359738368L);
+		board.setBlackQueenBoard(rooks.lineAttacks((6389270908594971944L),3,3));
+		board.setWhitePawnBoard(6389270908594971944L);
 		logger.debug("Board: {}",board.toString());
 	}
 
