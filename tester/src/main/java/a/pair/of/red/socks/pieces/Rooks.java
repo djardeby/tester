@@ -19,7 +19,7 @@ public class Rooks extends Piece {
 	}
 
 	public String findAllMoves(long empty) {
-		return boardToMoves(1,lineAttacks((getOwnPieces()|getOtherPieces()),0,0),1).toString();
+		return boardToMoves(1,lineAttacks((getOwnPieces()|getOtherPieces()),7,0),1).toString();
 	}
 
 	protected long lineAttacks(long occ, int line, int row) {
@@ -33,18 +33,15 @@ public class Rooks extends Piece {
 		logger.debug("orLower: {}",orLower);// 650770146155036672
 		long mMs1b = Long.lowestOneBit(lower);// 0x8000000000000000L >> Long.numberOfLeadingZeros (lower | 1);
 		logger.debug("mMs1b: {}",mMs1b); // 2251799813685248
-		long odiff = 2*ls1b - mMs1b;
-		if (Long.numberOfLeadingZeros(odiff)==0)
-			odiff = -2*ls1b - mMs1b;
 		int numberOfTrailingZeros = Long.numberOfTrailingZeros(ls1b);
 		logger.debug("numberOfTrailingZeros: {}",numberOfTrailingZeros);
 		int numberOfLeadingZeros = Long.numberOfLeadingZeros(mMs1b);
 		logger.debug("numberOfLeadingZeros: {}",numberOfLeadingZeros);
-		odiff = (0xffffffffffffffffL<< (numberOfTrailingZeros+numberOfLeadingZeros)) >>> numberOfLeadingZeros;
+		long odiff = (0xffffffffffffffffL<< (numberOfTrailingZeros+numberOfLeadingZeros)) >>> numberOfLeadingZeros;
 		logger.debug("odiff: {}",odiff); // 63331869744103424
 		long occupied = FILE_ATTACK[row][line][UPPER] | FILE_ATTACK[row][line][LOWER];
 		logger.debug("occupied: {}",occupied);
-		long returnValue = occupied & odiff&~getOwnPieces();
+		long returnValue = occupied & odiff & ~getOwnPieces();
 		logger.debug("Returnvalue: {}", returnValue); // 2260596041449472
 		return returnValue;
 	}
