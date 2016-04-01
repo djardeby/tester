@@ -22,14 +22,19 @@ public class Rooks extends Piece {
 		return "";
 	}
 
-	long lineAttacks(long occ, int sq, int line) {
-		long upper = FILE_ATTACK[0][line][UPPER];// & occ;
-		logger.debug("upper: {}",Long.toBinaryString(upper));
-		long lower = FILE_ATTACK[0][0][LOWER] & occ;
-		logger.debug("upper: {}",Long.toBinaryString(lower));
-		long mMs1b = 0x8000000000000000L >> Long.numberOfLeadingZeros (lower | 1);
+	long lineAttacks(long occ, int row, int line) {
+		long upper = FILE_ATTACK[line][row][UPPER] & occ;
+		logger.debug("upper: {}",upper);
+		long lower = FILE_ATTACK[line][row][LOWER] & occ;
+		logger.debug("lower: {}",lower);
 		long ls1b  = upper & -upper;
-		long odiff = 2*ls1b + mMs1b;
-		return FILE_ATTACK[sq][line][1] & odiff;
+		logger.debug("ls1b: {}",ls1b);
+		long mMs1b = 0x8000000000000000L >> Long.numberOfLeadingZeros (lower | 1);
+		logger.debug("mMs1b: {}",mMs1b);
+		long odiff = 2*(ls1b) - mMs1b;
+		logger.debug("odiff: {}",odiff);
+		long returnValue = (FILE_ATTACK[row][line][0] | FILE_ATTACK[row][line][1]) & odiff;
+		logger.debug("Returnvalue: {}", returnValue);
+		return returnValue;
 	}
 }
