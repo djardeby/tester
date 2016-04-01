@@ -9,20 +9,17 @@ import java.util.Arrays;
 
 public class StandardBoard implements Board {
 	private static final Logger logger = LoggerFactory.getLogger(StandardBoard.class);
+private static final int whiteIndex=0;
+private static final int blackIndex=1;
+
 	private long EMPTY = 0L;
 	private long OCCUPIED = 0L;
-	private long whitePawnBoard = 0L;
-	private long blackPawnBoard = 0L;
-	private long whiteRookBoard = 0L;
-	private long blackRookBoard = 0L;
-	private long whiteKnightBoard = 0L;
-	private long blackKnightBoard = 0L;
-	private long whiteBishopBoard = 0L;
-	private long blackBishopBoard = 0L;
-	private long whiteQueenBoard = 0L;
-	private long blackQueenBoard = 0L;
-	private long whiteKingBoard = 0L;
-	private long blackKingBoard = 0L;
+	private long[] pawnBoard = { 0L, 0L};
+	private long[] rookBoard = { 0L, 0L};
+	private long[] knightBoard = { 0L, 0L};
+	private long[] bishopBoard = { 0L, 0L};
+	private long[] queenBoard = { 0L, 0L};
+	private long[] kingBoard = { 0L, 0L};
 	private boolean whiteToMove = true;
 	private boolean hasMoved = true;
 	private long blackPieces;
@@ -36,17 +33,17 @@ public class StandardBoard implements Board {
 
 	public StandardBoard(long... boards) {
 		setWhitePawnBoard((boards[0]));
-		whiteRookBoard = (boards[1]);
-		whiteKnightBoard = (boards[2]);
-		whiteBishopBoard = (boards[3]);
-		whiteQueenBoard = (boards[4]);
-		whiteKingBoard = (boards[5]);
+		setWhiteRookBoard((boards[1]));
+		setWhiteKnightBoard((boards[2]));
+		setWhiteBishopBoard((boards[3]));
+		setWhiteQueenBoard((boards[4]));
+		setWhiteKingBoard((boards[5]));
 		setBlackPawnBoard((boards[6]));
-		blackRookBoard = (boards[7]);
-		blackKnightBoard = (boards[8]);
-		blackBishopBoard = (boards[9]);
-		blackQueenBoard = (boards[10]);
-		blackKingBoard = (boards[11]);
+		setBlackRookBoard((boards[7]));
+		setBlackKnightBoard((boards[8]));
+		setBlackBishopBoard((boards[9]));
+		setBlackQueenBoard((boards[10]));
+		setBlackKingBoard((boards[11]));
 	}
 
 	public String moves() {
@@ -54,7 +51,9 @@ public class StandardBoard implements Board {
 		Pawns whitePawns = new Pawns(Colour.WHITE, getWhitePawnBoard(), getWhitePieces(), getBlackPieces());
 		Pawns blackPawns = new Pawns(Colour.BLACK, getBlackPawnBoard(), getBlackPieces(), getWhitePieces());
 		Pawns pawns = isWhiteToMove() ? whitePawns : blackPawns;
-		Knights knights = new Knights(Colour.WHITE, getWhiteKnightBoard(), getWhitePieces(), getBlackPieces());
+		Knights whiteKnights = new Knights(Colour.WHITE, getWhiteKnightBoard(), getWhitePieces(), getBlackPieces());
+		Knights blackKnights = new Knights(Colour.BLACK, getBlackKnightBoard(), getBlackPieces(), getWhitePieces());
+		Knights knights = isWhiteToMove() ? whiteKnights : blackKnights;
 		moves.append(pawns.findAllMoves(getEmpty()));
 		moves.append(knights.findAllMoves(getEmpty()));
 		return moveToAlgebra(moves.toString());
@@ -63,65 +62,41 @@ public class StandardBoard implements Board {
 	public void makeMove(String move) {
 		lastMoveDestination = algebraToBoard(move.substring(2, 4));
 		lastMoveStart = algebraToBoard(move.substring(0, 2));
-		boolean successs = whiteToMove ? moveWhitePieces(lastMoveStart) : moveBlackPieces();
+		boolean successs = whiteToMove ? movePieces(lastMoveStart,whiteIndex) : movePieces(lastMoveStart,blackIndex);
 		if (successs)
 			whiteToMove = !whiteToMove;
 
 	}
 
-	private boolean moveBlackPieces() {
-		if ((blackPawnBoard & lastMoveStart) != 0L) {
-			blackPawnBoard ^= lastMoveStart;
-			blackPawnBoard ^= lastMoveDestination;
-		} else if ((blackRookBoard & lastMoveStart) != 0L) {
-			blackRookBoard ^= lastMoveStart;
-			blackRookBoard ^= lastMoveDestination;
-		} else if ((blackKnightBoard & lastMoveStart) != 0L) {
-			blackKnightBoard ^= lastMoveStart;
-			blackKnightBoard ^= lastMoveDestination;
-		} else if ((blackBishopBoard & lastMoveStart) != 0L) {
-			blackBishopBoard ^= lastMoveStart;
-			blackBishopBoard ^= lastMoveDestination;
-		} else if ((blackQueenBoard & lastMoveStart) != 0L) {
-			blackQueenBoard ^= lastMoveStart;
-			blackQueenBoard ^= lastMoveDestination;
-		} else if ((blackKingBoard & lastMoveStart) != 0L) {
-			blackKingBoard ^= lastMoveStart;
-			blackKingBoard ^= lastMoveDestination;
-		}
-		return true;
-	}
-
-	private boolean moveWhitePieces(final long checkAgainst) {
-		if ((whitePawnBoard & checkAgainst) != 0L) {
-			whitePawnBoard ^= lastMoveStart;
-			whitePawnBoard ^= lastMoveDestination;
-		} else if ((whiteRookBoard & checkAgainst) != 0L) {
-			whiteRookBoard ^= lastMoveStart;
-			whiteRookBoard ^= lastMoveDestination;
-		} else if ((whiteKnightBoard & checkAgainst) != 0L) {
-			whiteKnightBoard ^= lastMoveStart;
-			whiteKnightBoard ^= lastMoveDestination;
-		} else if ((whiteBishopBoard & checkAgainst) != 0L) {
-			whiteBishopBoard ^= lastMoveStart;
-			whiteBishopBoard ^= lastMoveDestination;
-		} else if ((whiteQueenBoard & checkAgainst) != 0L) {
-			whiteQueenBoard ^= lastMoveStart;
-			whiteQueenBoard ^= lastMoveDestination;
-		} else if ((whiteKingBoard & checkAgainst) != 0L) {
-			whiteKingBoard ^= lastMoveStart;
-			whiteKingBoard ^= lastMoveDestination;
+	private boolean movePieces(final long checkAgainst, int colourToMove) {
+		if ((pawnBoard[colourToMove] & checkAgainst) != 0L) {
+			pawnBoard[colourToMove] ^= lastMoveStart;
+			pawnBoard[colourToMove] ^= lastMoveDestination;
+		} else if ((rookBoard[colourToMove] & checkAgainst) != 0L) {
+			rookBoard[colourToMove] ^=lastMoveStart;
+			rookBoard[colourToMove] ^=lastMoveDestination;
+		} else if ((knightBoard[colourToMove] & checkAgainst) != 0L) {
+			knightBoard[colourToMove] ^= lastMoveStart;
+			knightBoard[colourToMove] ^= lastMoveDestination;
+		} else if ((bishopBoard[colourToMove] & checkAgainst) != 0L) {
+			bishopBoard[colourToMove]^= lastMoveStart;
+			bishopBoard[colourToMove]^= lastMoveDestination;
+		} else if ((queenBoard[colourToMove] & checkAgainst) != 0L) {
+			queenBoard[colourToMove] ^= lastMoveStart;
+			queenBoard[colourToMove]^= lastMoveDestination;
+		} else if ((kingBoard[colourToMove] & checkAgainst) != 0L) {
+			kingBoard[colourToMove] ^= lastMoveStart;
+			kingBoard[colourToMove] ^= lastMoveDestination;
 		}
 		return true;
 	}
 
 	public void undoMove() {
-		boolean successs = whiteToMove ? moveBlackPieces() : moveWhitePieces(lastMoveDestination);
+		boolean successs = whiteToMove ?  movePieces(lastMoveDestination,blackIndex) : movePieces(lastMoveDestination,whiteIndex);
 		if (successs)
 			whiteToMove = !whiteToMove;
 
 	}
-
 
 	private String moveToAlgebra(final String move) {
 		StringBuilder builder = new StringBuilder();
@@ -159,13 +134,13 @@ public class StandardBoard implements Board {
 
 	private long getBlackPieces() {
 		if (hasMoved)
-			blackPieces = getBlackPawnBoard() | blackRookBoard | blackKnightBoard | blackBishopBoard | blackQueenBoard | blackKingBoard;
+			blackPieces = getBlackPawnBoard() | getBlackRookBoard() | getBlackKnightBoard() | getBlackBishopBoard() | getBlackQueenBoard() | getBlackKingBoard();
 		return blackPieces;
 	}
 
 	private long getWhitePieces() {
 		if (hasMoved)
-			whitePieces = getWhitePawnBoard() | whiteRookBoard | whiteKnightBoard | whiteBishopBoard | whiteQueenBoard | whiteKingBoard;
+			whitePieces = getWhitePawnBoard() | getWhiteRookBoard() | getWhiteKnightBoard() | getWhiteBishopBoard() | getWhiteQueenBoard() | getWhiteKingBoard();
 		return whitePieces;
 	}
 
@@ -179,37 +154,37 @@ public class StandardBoard implements Board {
 			if (((getWhitePawnBoard() >> i) & 1) == 1) {
 				chessBoard[i / 8][i % 8] = "P";
 			}
-			if (((whiteKnightBoard >> i) & 1) == 1) {
+			if (((getWhiteKnightBoard() >> i) & 1) == 1) {
 				chessBoard[i / 8][i % 8] = "N";
 			}
-			if (((whiteBishopBoard >> i) & 1) == 1) {
+			if (((getWhiteBishopBoard() >> i) & 1) == 1) {
 				chessBoard[i / 8][i % 8] = "B";
 			}
-			if (((whiteRookBoard >> i) & 1) == 1) {
+			if (((getWhiteRookBoard() >> i) & 1) == 1) {
 				chessBoard[i / 8][i % 8] = "R";
 			}
-			if (((whiteQueenBoard >> i) & 1) == 1) {
+			if (((getWhiteQueenBoard() >> i) & 1) == 1) {
 				chessBoard[i / 8][i % 8] = "Q";
 			}
-			if (((whiteKingBoard >> i) & 1) == 1) {
+			if (((getWhiteKingBoard() >> i) & 1) == 1) {
 				chessBoard[i / 8][i % 8] = "K";
 			}
 			if (((getBlackPawnBoard() >> i) & 1) == 1) {
 				chessBoard[i / 8][i % 8] = "p";
 			}
-			if (((blackKnightBoard >> i) & 1) == 1) {
+			if (((getBlackKnightBoard() >> i) & 1) == 1) {
 				chessBoard[i / 8][i % 8] = "n";
 			}
-			if (((blackBishopBoard >> i) & 1) == 1) {
+			if (((getBlackBishopBoard() >> i) & 1) == 1) {
 				chessBoard[i / 8][i % 8] = "b";
 			}
-			if (((blackRookBoard >> i) & 1) == 1) {
+			if (((getBlackRookBoard() >> i) & 1) == 1) {
 				chessBoard[i / 8][i % 8] = "r";
 			}
-			if (((blackQueenBoard >> i) & 1) == 1) {
+			if (((getBlackQueenBoard() >> i) & 1) == 1) {
 				chessBoard[i / 8][i % 8] = "q";
 			}
-			if (((blackKingBoard >> i) & 1) == 1) {
+			if (((getBlackKingBoard() >> i) & 1) == 1) {
 				chessBoard[i / 8][i % 8] = "k";
 			}
 		}
@@ -221,19 +196,19 @@ public class StandardBoard implements Board {
 	}
 
 	public long getWhiteKnightBoard() {
-		return whiteKnightBoard;
+		return knightBoard[whiteIndex];
 	}
 
 	public void setWhiteKnightBoard(long whiteKnightBoard) {
-		this.whiteKnightBoard = whiteKnightBoard;
+		this.knightBoard[whiteIndex] = whiteKnightBoard;
 	}
 
 	public long getBlackKnightBoard() {
-		return blackKnightBoard;
+		return knightBoard[blackIndex];
 	}
 
 	public void setBlackKnightBoard(long blackKnightBoard) {
-		this.blackKnightBoard = blackKnightBoard;
+		this.knightBoard[blackIndex] = blackKnightBoard;
 	}
 
 	private long algebraToBoard(String move) {
@@ -241,20 +216,83 @@ public class StandardBoard implements Board {
 		return 1L << from;
 	}
 
-
 	public long getWhitePawnBoard() {
-		return whitePawnBoard;
+		return pawnBoard[whiteIndex];
 	}
 
 	public void setWhitePawnBoard(long whitePawnBoard) {
-		this.whitePawnBoard = whitePawnBoard;
+		this.pawnBoard[whiteIndex] = whitePawnBoard;
 	}
 
 	public long getBlackPawnBoard() {
-		return blackPawnBoard;
+		return pawnBoard[blackIndex];
 	}
 
 	public void setBlackPawnBoard(long blackPawnBoard) {
-		this.blackPawnBoard = blackPawnBoard;
+		this.pawnBoard[blackIndex] = blackPawnBoard;
+	}
+
+	public long getWhiteRookBoard() {
+		return rookBoard[whiteIndex];
+	}
+
+	public void setWhiteRookBoard(long whiteRookBoard) {
+		this.rookBoard[whiteIndex] = whiteRookBoard;
+	}
+
+	public long getBlackRookBoard() {
+		return rookBoard[blackIndex];
+	}
+
+	public void setBlackRookBoard(long blackRookBoard) {
+		this.rookBoard[blackIndex] = blackRookBoard;
+	}
+
+	public long getWhiteBishopBoard() {
+		return bishopBoard[whiteIndex];
+	}
+
+	public void setWhiteBishopBoard(long whiteBishopBoard) {
+		this.bishopBoard[whiteIndex] = whiteBishopBoard;
+	}
+
+	public long getBlackBishopBoard() {
+		return bishopBoard[blackIndex];
+	}
+
+	public void setBlackBishopBoard(long blackBishopBoard) {
+		this.bishopBoard[blackIndex] = blackBishopBoard;
+	}
+
+	public long getWhiteQueenBoard() {
+		return queenBoard[whiteIndex];
+	}
+
+	public void setWhiteQueenBoard(long whiteQueenBoard) {
+		this.queenBoard[whiteIndex] = whiteQueenBoard;
+	}
+
+	public long getBlackQueenBoard() {
+		return queenBoard[blackIndex];
+	}
+
+	public void setBlackQueenBoard(long blackQueenBoard) {
+		this.queenBoard[blackIndex] = blackQueenBoard;
+	}
+
+	public long getWhiteKingBoard() {
+		return kingBoard[whiteIndex];
+	}
+
+	public void setWhiteKingBoard(long whiteKingBoard) {
+		this.kingBoard[whiteIndex] = whiteKingBoard;
+	}
+
+	public long getBlackKingBoard() {
+		return kingBoard[blackIndex];
+	}
+
+	public void setBlackKingBoard(long blackKingBoard) {
+		this.kingBoard[blackIndex] = blackKingBoard;
 	}
 }
