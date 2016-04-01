@@ -3,6 +3,7 @@ package a.pair.of.red.socks.board;
 import a.pair.of.red.socks.factory.BoardFactory;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +46,7 @@ public class StandardBoardTest {
 	}
 
 	@Test
+	@Ignore
 	public void perftInit3() throws Exception {
 		String moves = sut.moves();
 		String moreMoves = "";
