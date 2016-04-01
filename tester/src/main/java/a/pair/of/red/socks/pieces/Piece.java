@@ -4,17 +4,18 @@ import a.pair.of.red.socks.board.Colour;
 
 public abstract class Piece {
 
+	public final Colour colour;
+
 	private long otherPieces;
 	private long ownPieces;
 
-	public Piece(long ownPieces, long otherPieces) {
+	public Piece(final Colour colour, long ownPieces, long otherPieces) {
+		this.colour = colour;
 		this.ownPieces= ownPieces;
 		this.otherPieces= otherPieces;
 	}
 
 	protected abstract String findAllMoves(long empty);
-
-	protected abstract Colour getColour();
 
 	protected StringBuilder boardToMoves(final int sidesteps, long pieceBoard, final int forwardsteps) {
 		StringBuilder moves = new StringBuilder();

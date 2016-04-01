@@ -7,12 +7,10 @@ import org.slf4j.LoggerFactory;
 
 public class Knights extends Piece {
 	private static final Logger logger = LoggerFactory.getLogger(Knights.class);
-	private final Colour colour;
 	private long knightsBoard = 0L;
 
 	public Knights(Colour colour, final long knightsBoard, long ownPieces, long otherPieces) {
-		super(ownPieces, otherPieces);
-		this.colour = colour;
+		super(colour, ownPieces, otherPieces);
 		this.knightsBoard = knightsBoard;
 	}
 
@@ -68,7 +66,4 @@ public class Knights extends Piece {
 		return boardToMoves(1, knightsMoves, 2);
 	}
 
-	public Colour getColour() {
-		return colour;
-	}
 }
