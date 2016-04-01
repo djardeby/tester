@@ -2,6 +2,7 @@ package a.pair.of.red.socks.board;
 
 import a.pair.of.red.socks.pieces.Knights;
 import a.pair.of.red.socks.pieces.Pawns;
+import a.pair.of.red.socks.pieces.Rooks;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,6 +57,8 @@ private static final int blackIndex=1;
 		Knights knights = isWhiteToMove() ? whiteKnights : blackKnights;
 		moves.append(pawns.findAllMoves(getEmpty()));
 		moves.append(knights.findAllMoves(getEmpty()));
+		Rooks rooks = new Rooks(Colour.WHITE,rookBoard[whiteIndex],getWhitePieces(),getBlackPieces());
+		moves.append(rooks.findAllMoves(getEmpty()));
 		return moveToAlgebra(moves.toString());
 	}
 

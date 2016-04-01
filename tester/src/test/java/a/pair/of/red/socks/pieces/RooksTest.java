@@ -45,8 +45,9 @@ public class RooksTest {
 			}
 		}*/
 		board.setBlackRookBoard(34359738368L);
-		board.setBlackQueenBoard(rooks.lineAttacks((6389270908594971944L),3,3));
 		board.setWhitePawnBoard(6389270908594971944L);
+		logger.debug("Board: {}",board.toString());
+		board.setBlackQueenBoard(rooks.lineAttacks((6389270908594971944L),7,7));
 		logger.debug("Board: {}",board.toString());
 	}
 

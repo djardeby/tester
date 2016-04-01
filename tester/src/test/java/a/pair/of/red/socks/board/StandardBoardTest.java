@@ -46,7 +46,7 @@ public class StandardBoardTest {
 	}
 
 	@Test
-	@Ignore
+
 	public void perftInit3() throws Exception {
 		String moves = sut.moves();
 		String moreMoves = "";
