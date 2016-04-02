@@ -19,7 +19,9 @@ public class Rooks extends Piece {
 	}
 
 	public String findAllMoves(long empty) {
-		return boardToMoves(1,lineAttacks((getOwnPieces()|getOtherPieces()),7,0),1).toString();
+		String moves = boardToMoves(1, lineAttacks((getOwnPieces() | getOtherPieces()), 7, (Colour.WHITE.equals(colour)?0:7)), 1).toString();
+		 moves += boardToMoves(1, lineAttacks((getOwnPieces() | getOtherPieces()), 0, (Colour.WHITE.equals(colour)?0:7)), 1).toString();
+		return moves;
 	}
 
 	protected long lineAttacks(long occ, int line, int row) {

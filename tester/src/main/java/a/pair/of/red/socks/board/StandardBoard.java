@@ -57,7 +57,9 @@ private static final int blackIndex=1;
 		Knights knights = isWhiteToMove() ? whiteKnights : blackKnights;
 		moves.append(pawns.findAllMoves(getEmpty()));
 		moves.append(knights.findAllMoves(getEmpty()));
-		Rooks rooks = new Rooks(Colour.WHITE,rookBoard[whiteIndex],getWhitePieces(),getBlackPieces());
+		Rooks whiteRooks = new Rooks(Colour.WHITE,rookBoard[whiteIndex],getWhitePieces(),getBlackPieces());
+		Rooks blackRooks = new Rooks(Colour.BLACK,rookBoard[blackIndex],getBlackPieces(),getWhitePieces());
+		Rooks rooks = isWhiteToMove()?whiteRooks:blackRooks;
 		moves.append(rooks.findAllMoves(getEmpty()));
 		return moveToAlgebra(moves.toString());
 	}

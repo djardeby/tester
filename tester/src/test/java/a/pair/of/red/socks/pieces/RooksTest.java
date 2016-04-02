@@ -9,6 +9,11 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 import static a.pair.of.red.socks.utils.Constants.*;
 import static org.junit.Assert.*;
 
@@ -50,5 +55,6 @@ public class RooksTest {
 		board.setBlackQueenBoard(rooks.lineAttacks((6389270908594971944L),7,7));
 		logger.debug("Board: {}",board.toString());
 	}
+
 
 }
