@@ -45,4 +45,16 @@ public class Rooks extends Piece {
 		long returnValue = occupied & odiff & ~getOwnPieces();
 		return returnValue;
 	}
+	protected long rankAttacks(long occ, int column, int row) {
+		long upper = FILE_ATTACK[row][column][UPPER] & occ;
+		long lower = FILE_ATTACK[row][column][LOWER] & occ;
+		long ls1b  = Long.highestOneBit(upper);
+		long mMs1b = Long.lowestOneBit(lower);
+		int numberOfTrailingZeros = Long.numberOfTrailingZeros(ls1b);
+		int numberOfLeadingZeros = Long.numberOfLeadingZeros(mMs1b);
+		long odiff = (0xffffffffffffffffL<< (numberOfTrailingZeros+numberOfLeadingZeros)) >>> numberOfLeadingZeros;
+		long occupied = FILE_ATTACK[row][column][UPPER] | FILE_ATTACK[row][column][LOWER];
+		long returnValue = occupied & odiff & ~getOwnPieces();
+		return returnValue;
+	}
 }

@@ -58,4 +58,16 @@ public class RooksTest {
 	}
 
 
+	@Test
+	public void arrayTest() {
+		StandardBoard board = new StandardBoard();
+		int square = 7;
+		board.setWhiteKingBoard(LINE_ATTACKS[square][0][0]|LINE_ATTACKS[square][0][1]);
+		board.setBlackKingBoard(LINE_ATTACKS[square][1][1]|LINE_ATTACKS[square][1][0]);
+		logger.debug(board.toString());
+		logger.debug("line_attacks: {}",LINE_ATTACKS.length);
+		logger.debug("line_attacks: {}",LINE_ATTACKS[0].length);
+		logger.debug("line_attacks: {}",LINE_ATTACKS[0][0].length);
+	}
+
 }
