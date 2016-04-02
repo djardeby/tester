@@ -38,7 +38,6 @@ public class RooksTest {
 
 	@Test
 	public void lineAttacks() throws Exception {
-		Rooks rooks = new Rooks(Colour.BLACK, 0L,0L,0L);
 //		rooks.lineAttacks(0L,0,0);
 
 		StandardBoard board = new StandardBoard();
@@ -49,11 +48,13 @@ public class RooksTest {
 					logger.debug(board.toString());
 			}
 		}*/
-		board.setBlackRookBoard(34359738368L);
+		board.setBlackRookBoard(0x8100000000000081L);//-1L);// 34359738368L);
 		board.setWhitePawnBoard(6389270908594971944L);
 		logger.debug("Board: {}",board.toString());
-		board.setBlackQueenBoard(rooks.lineAttacks((6389270908594971944L),7,7));
-		logger.debug("Board: {}",board.toString());
+		//Rooks rooks = new Rooks(Colour.BLACK, 0L,0L,0L);
+		board.setWhiteToMove(false);
+		//board.moves();
+		logger.debug("Moves: {}",board.moves());
 	}
 
 
