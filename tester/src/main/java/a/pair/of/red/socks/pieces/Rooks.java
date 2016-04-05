@@ -1,13 +1,10 @@
 package a.pair.of.red.socks.pieces;
 
 import a.pair.of.red.socks.board.Colour;
-import a.pair.of.red.socks.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static a.pair.of.red.socks.utils.Constants.FILE_ATTACK;
-import static a.pair.of.red.socks.utils.Constants.LOWER;
-import static a.pair.of.red.socks.utils.Constants.UPPER;
+import static a.pair.of.red.socks.utils.Constants.*;
 
 public class Rooks extends Piece {
 	private static final Logger logger = LoggerFactory.getLogger(Rooks.class);
@@ -24,37 +21,38 @@ public class Rooks extends Piece {
 		long possibility = tmpBoard & ~(tmpBoard - 1);
 		while (possibility != 0) {
 			int index = Long.numberOfTrailingZeros(possibility);
-			int column =index % 8;
-			int row = 7-(index / 8);
-			moves += boardToMoves(0, lineAttacks((getOwnPieces() | getOtherPieces()), column, row), 0).toString();
+			int startFile = index%8;
+			int startRank = index/8;
+			String startSquare = "" + startFile + startRank;
+			moves += newBoardToMoves(lineAttacks((getOwnPieces() | getOtherPieces()), 0, index), startSquare).toString();
+			moves += newBoardToMoves(lineAttacks((getOwnPieces() | getOtherPieces()), 1, index), startSquare).toString();
 			tmpBoard &= ~possibility;
 			possibility = tmpBoard & ~(tmpBoard - 1);
 		}
 		return moves;
 	}
 
-	protected long lineAttacks(long occ, int column, int row) {
-		long upper = FILE_ATTACK[row][column][UPPER] & occ;
-		long lower = FILE_ATTACK[row][column][LOWER] & occ;
-		long ls1b  = Long.highestOneBit(upper);
-		long mMs1b = Long.lowestOneBit(lower);
-		int numberOfTrailingZeros = Long.numberOfTrailingZeros(ls1b);
-		int numberOfLeadingZeros = Long.numberOfLeadingZeros(mMs1b);
-		long odiff = (0xffffffffffffffffL<< (numberOfTrailingZeros+numberOfLeadingZeros)) >>> numberOfLeadingZeros;
-		long occupied = FILE_ATTACK[row][column][UPPER] | FILE_ATTACK[row][column][LOWER];
-		long returnValue = occupied & odiff & ~getOwnPieces();
-		return returnValue;
+	protected long lineAttacks(final long occ, final int  line, final int sq) {
+		long lower = LINE_ATTACKS[sq][line][0] & occ;
+		long upper = LINE_ATTACKS[sq][line][1] & occ;
+		long ms1b  = 0x8000000000000000L >>> Long.numberOfLeadingZeros (lower | 1);
+		long ls1b  = upper & -upper;
+		long odiff = 2*ls1b - ms1b;
+		return (LINE_ATTACKS[sq][line][0]|LINE_ATTACKS[sq][line][1]) & odiff&~getOwnPieces();
 	}
-	protected long rankAttacks(long occ, int column, int row) {
-		long upper = FILE_ATTACK[row][column][UPPER] & occ;
-		long lower = FILE_ATTACK[row][column][LOWER] & occ;
-		long ls1b  = Long.highestOneBit(upper);
-		long mMs1b = Long.lowestOneBit(lower);
-		int numberOfTrailingZeros = Long.numberOfTrailingZeros(ls1b);
-		int numberOfLeadingZeros = Long.numberOfLeadingZeros(mMs1b);
-		long odiff = (0xffffffffffffffffL<< (numberOfTrailingZeros+numberOfLeadingZeros)) >>> numberOfLeadingZeros;
-		long occupied = FILE_ATTACK[row][column][UPPER] | FILE_ATTACK[row][column][LOWER];
-		long returnValue = occupied & odiff & ~getOwnPieces();
-		return returnValue;
+
+	protected StringBuilder newBoardToMoves(long pieceBoard, String startSquare) {
+		StringBuilder moves = new StringBuilder();
+		long possibility = pieceBoard & ~(pieceBoard - 1);
+		while (possibility != 0) {
+			int index = Long.numberOfTrailingZeros(possibility);
+			moves.append(startSquare);
+			moves.append(index % 8);
+			moves.append(index / 8);
+			pieceBoard &= ~possibility;
+			possibility = pieceBoard & ~(pieceBoard - 1);
+		}
+		return moves;
 	}
+
 }

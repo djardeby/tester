@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static a.pair.of.red.socks.utils.Constants.LINE_ATTACKS;
+import static org.junit.Assert.assertEquals;
 
 public class RooksTest {
 
@@ -31,22 +32,33 @@ public class RooksTest {
 	@Test
 	public void lineAttacks() throws Exception {
 //		rooks.lineAttacks(0L,0,0);
+		long[] startPlatser={0x80L,0x8000000000000000L,0x1L,0x100000000000000L,134217728};
+		String[] expected ={"h8h7h8h6h8e8h8f8h8g8","h1h2h1g1","a8a7a8b8a8c8a8d8","a1a2a1b1a1c1a1d1","d5d6d5d4d5a5d5b5d5c5d5e5d5f5"};
+		for (int i = 0; i < startPlatser.length; i++) {
 
 		StandardBoard board = new StandardBoard();
-/*		for (int i = 0; i < FILE_ATTACK.length; i++) {
-			for (int j = 0; j < FILE_ATTACK[i].length; j++) {
-					board.setBlackPawnBoard(FILE_ATTACK[i][j][0]);
-					board.setBlackQueenBoard(FILE_ATTACK[i][j][1]);
+/*		for (int i = 0; i < LINE_ATTACKS.length; i++) {
+			//for (int j = 0; j < LINE_ATTACKS[i].length; j++) {
+					board.setBlackPawnBoard(LINE_ATTACKS[i][0][0]);
+					board.setWhiteQueenBoard(LINE_ATTACKS[i][0][1]);
+					board.setBlackKnightBoard(LINE_ATTACKS[i][1][0]);
+					board.setWhiteKnightBoard(LINE_ATTACKS[i][1][1]);
 					logger.debug(board.toString());
-			}
+			//}
 		}*/
-		board.setBlackRookBoard(0x8100000000000081L);//-1L);// 34359738368L);
-		board.setWhitePawnBoard(6389270908594971944L);
+
+		board.setBlackRookBoard(startPlatser[i]);
+		board.setWhitePawnBoard(6389270908594971928L);
+		//board.setWhitePawnBoard(1L);
 		logger.debug("Board: {}", board.toString());
 		//Rooks rooks = new Rooks(Colour.BLACK, 0L,0L,0L);
 		board.setWhiteToMove(false);
 		//board.moves();
-		logger.debug("Moves: {}", board.moves());
+			String actual = board.moves();
+			logger.debug("Moves: {}", actual);
+			assertEquals("Felaktiga drag",expected[i], actual);
+		}
+
 	}
 
 
@@ -55,7 +67,9 @@ public class RooksTest {
 		StandardBoard board = new StandardBoard();
 		for (int square = 0; square < LINE_ATTACKS.length; square++) {
 			board.setWhiteKingBoard(LINE_ATTACKS[square][0][0] | LINE_ATTACKS[square][0][1]);
-			board.setBlackKingBoard(LINE_ATTACKS[square][1][1] | LINE_ATTACKS[square][1][0]);
+			board.setBlackKingBoard(LINE_ATTACKS[square][1][0] | LINE_ATTACKS[square][1][1]);
+//			board.setBlackKingBoard(LINE_ATTACKS[square][2][0] | LINE_ATTACKS[square][2][1]);
+//			board.setBlackKingBoard(LINE_ATTACKS[square][3][0] | LINE_ATTACKS[square][3][1]);
 			logger.debug(board.toString());
 		}
 		logger.debug("line_attacks: {}", LINE_ATTACKS.length);
