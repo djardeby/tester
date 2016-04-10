@@ -16,7 +16,7 @@ private static final Logger logger = LoggerFactory.getLogger(ConstantsTest.class
 	@Test
 	public void arrayTest() {
 		StandardBoard board = new StandardBoard();
-		for (int square = 2; square < LINE_ATTACKS.length; square+=8) {
+		for (int square = 7; square < LINE_ATTACKS.length; square+=8) {
 			logger.debug("Square: {}",square);
 			board.setWhiteKingBoard(LINE_ATTACKS[square][0][0] | LINE_ATTACKS[square][0][1]);
 			board.setBlackKingBoard(LINE_ATTACKS[square][1][0] | LINE_ATTACKS[square][1][1]);
