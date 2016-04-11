@@ -1,9 +1,6 @@
 package a.pair.of.red.socks.board;
 
-import a.pair.of.red.socks.pieces.Bishops;
-import a.pair.of.red.socks.pieces.Knights;
-import a.pair.of.red.socks.pieces.Pawns;
-import a.pair.of.red.socks.pieces.Rooks;
+import a.pair.of.red.socks.pieces.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +17,7 @@ private static final int blackIndex=1;
 	private long[] rookBoard = { 0L, 0L};
 	private long[] knightBoard = { 0L, 0L};
 	private long[] bishopBoard = { 0L, 0L};
-	private long[] queenBoard = { 0L, 0L};
+	private long[] queensBoard = { 0L, 0L};
 	private long[] kingBoard = { 0L, 0L};
 	private boolean whiteToMove = true;
 	private boolean hasMoved = true;
@@ -66,6 +63,10 @@ private static final int blackIndex=1;
 		Bishops blackBishops = new Bishops(Colour.BLACK,bishopBoard[blackIndex],getBlackPieces(),getWhitePieces());
 		Bishops bishops = isWhiteToMove()?whiteBishops:blackBishops;
 		moves.append(bishops.findAllMoves(getEmpty()));
+		Queens whiteQueens = new Queens(Colour.WHITE,queensBoard[whiteIndex],getWhitePieces(),getBlackPieces());
+		Queens blackQueens = new Queens(Colour.BLACK,queensBoard[blackIndex],getBlackPieces(),getWhitePieces());
+		Queens queens = isWhiteToMove()?whiteQueens:blackQueens;
+		moves.append(queens.findAllMoves(getEmpty()));
 		return moveToAlgebra(moves.toString());
 	}
 
@@ -91,9 +92,9 @@ private static final int blackIndex=1;
 		} else if ((bishopBoard[colourToMove] & checkAgainst) != 0L) {
 			bishopBoard[colourToMove]^= lastMoveStart;
 			bishopBoard[colourToMove]^= lastMoveDestination;
-		} else if ((queenBoard[colourToMove] & checkAgainst) != 0L) {
-			queenBoard[colourToMove] ^= lastMoveStart;
-			queenBoard[colourToMove]^= lastMoveDestination;
+		} else if ((queensBoard[colourToMove] & checkAgainst) != 0L) {
+			queensBoard[colourToMove] ^= lastMoveStart;
+			queensBoard[colourToMove]^= lastMoveDestination;
 		} else if ((kingBoard[colourToMove] & checkAgainst) != 0L) {
 			kingBoard[colourToMove] ^= lastMoveStart;
 			kingBoard[colourToMove] ^= lastMoveDestination;
@@ -275,19 +276,19 @@ private static final int blackIndex=1;
 	}
 
 	public long getWhiteQueenBoard() {
-		return queenBoard[whiteIndex];
+		return queensBoard[whiteIndex];
 	}
 
 	public void setWhiteQueenBoard(long whiteQueenBoard) {
-		this.queenBoard[whiteIndex] = whiteQueenBoard;
+		this.queensBoard[whiteIndex] = whiteQueenBoard;
 	}
 
 	public long getBlackQueenBoard() {
-		return queenBoard[blackIndex];
+		return queensBoard[blackIndex];
 	}
 
 	public void setBlackQueenBoard(long blackQueenBoard) {
-		this.queenBoard[blackIndex] = blackQueenBoard;
+		this.queensBoard[blackIndex] = blackQueenBoard;
 	}
 
 	public long getWhiteKingBoard() {
