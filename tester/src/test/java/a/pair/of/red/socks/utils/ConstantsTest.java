@@ -16,11 +16,12 @@ private static final Logger logger = LoggerFactory.getLogger(ConstantsTest.class
 	@Test
 	public void arrayTest() {
 		StandardBoard board = new StandardBoard();
-		for (int square = 0; square < LINE_ATTACKS.length; square+=8) {
+		for (int square = 0; square < LINE_ATTACKS.length; square+=1) {
 			logger.debug("Square: {}",square);
 			board.setWhiteKingBoard(LINE_ATTACKS[square][0][0] | LINE_ATTACKS[square][0][1]);
 			board.setBlackKingBoard(LINE_ATTACKS[square][1][0] | LINE_ATTACKS[square][1][1]);
 			board.setBlackQueenBoard(LINE_ATTACKS[square][2][0] | LINE_ATTACKS[square][2][1]);
+			logger.debug("LINE_ATTACKS[square][3][1]: {}",LINE_ATTACKS[square][3][1]);
 			board.setWhiteQueenBoard(LINE_ATTACKS[square][3][0] | LINE_ATTACKS[square][3][1]);
 			logger.debug(board.toString());
 			assertEquals("Felaktigt antal rutor", 64,LINE_ATTACKS.length);
