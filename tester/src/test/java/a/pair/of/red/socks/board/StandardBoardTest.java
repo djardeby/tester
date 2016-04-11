@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class StandardBoardTest {
 
@@ -25,6 +26,25 @@ public class StandardBoardTest {
 	@After
 	public void tearDown() throws Exception {
 		sut = null;
+	}
+
+
+	@Test
+	public void makeMove() throws Exception {
+		sut.makeMove("a2a4");
+		logger.debug("sut.toString(): {}",sut.toString());
+	}
+
+	@Test
+	public void undoMove() throws Exception {
+		sut.makeMove("c2c4");
+		sut.makeMove("a7a5");
+		sut.makeMove("d1b3");
+
+		sut.undoMove();
+		assertTrue("Det ska vara vits tur.",sut.isWhiteToMove());
+		logger.debug("sut.toString(): {}",sut.toString());
+
 	}
 
 	@Test
@@ -50,17 +70,20 @@ public class StandardBoardTest {
 	public void perftInit3() throws Exception {
 		String moves = sut.moves();
 		String moreMoves = "";
+		String evenMoreMoves = "";
+		int numberOfMoves=0;
 		for (int i = 0; i < moves.length(); i += 4) {
 			sut.makeMove(moves.substring(i, i + 4));
-			moreMoves += sut.moves();
+			moreMoves = sut.moves();
+			for (int j = 0; j < moreMoves.length(); j += 4) {
+				sut.makeMove(moreMoves.substring(j, j + 4));
+				evenMoreMoves = sut.moves();
+				sut.undoMove();
+				numberOfMoves+=evenMoreMoves.length()/4;
+			}
 			sut.undoMove();
 		}
-		String evenMoreMoves = "";
-		for (int i = 0; i < moreMoves.length(); i += 4) {
-			sut.makeMove(moreMoves.substring(i, i + 4));
-			evenMoreMoves += sut.moves();
-			sut.undoMove();
-		}
-		assertEquals("Felaktigt antal drag", 8902, evenMoreMoves.length() / 4);
+
+		assertEquals("Felaktigt antal drag", 8902, numberOfMoves);
 	}
 }

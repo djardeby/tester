@@ -123,7 +123,7 @@ private static final int blackIndex=1;
 		return builder.toString();
 	}
 
-	private boolean isWhiteToMove() {
+	protected boolean isWhiteToMove() {
 		return whiteToMove;
 	}
 
