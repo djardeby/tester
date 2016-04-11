@@ -1,5 +1,6 @@
 package a.pair.of.red.socks.board;
 
+import a.pair.of.red.socks.pieces.Bishops;
 import a.pair.of.red.socks.pieces.Knights;
 import a.pair.of.red.socks.pieces.Pawns;
 import a.pair.of.red.socks.pieces.Rooks;
@@ -61,6 +62,10 @@ private static final int blackIndex=1;
 		Rooks blackRooks = new Rooks(Colour.BLACK,rookBoard[blackIndex],getBlackPieces(),getWhitePieces());
 		Rooks rooks = isWhiteToMove()?whiteRooks:blackRooks;
 		moves.append(rooks.findAllMoves(getEmpty()));
+		Bishops whiteBishops = new Bishops(Colour.WHITE,bishopBoard[whiteIndex],getWhitePieces(),getBlackPieces());
+		Bishops blackBishops = new Bishops(Colour.BLACK,bishopBoard[blackIndex],getBlackPieces(),getWhitePieces());
+		Bishops bishops = isWhiteToMove()?whiteBishops:blackBishops;
+		moves.append(bishops.findAllMoves(getEmpty()));
 		return moveToAlgebra(moves.toString());
 	}
 
