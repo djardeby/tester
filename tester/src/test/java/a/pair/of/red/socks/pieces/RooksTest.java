@@ -32,9 +32,9 @@ public class RooksTest {
 	@Test
 	public void lineAttacks() throws Exception {
 //		rooks.lineAttacks(0L,0,0);
-		long[] startPlatser={0x80L,0x8000000000000000L,0x1L,0x100000000000000L,134217728,512L};
-		String[] expected ={"h8h7h8h6h8e8h8f8h8g8","h1h2h1g1","a8a7a8b8a8c8a8d8","a1a2a1b1a1c1a1d1","d5d6d5d4d5a5d5b5d5c5d5e5d5f5","b7b8b7b6b7a7b7c7"};
-		for (int i = 0; i < startPlatser.length; i++) {
+		long[] startPlatser={0x80L,0x8000000000000000L,0x1L,0x100000000000000L,134217728,512L,8796093022208L};
+		String[] expected ={"c3c2e3e2c3d2e3f2c3b2e3d2h8h7h8h6h8e8h8f8h8g8","c3c2e3e2c3d2e3f2c3b2e3d2h1h2h1g1","c3c2e3e2c3d2e3f2c3b2e3d2a8a7a8b8a8c8a8d8","c3c2e3e2c3d2e3f2c3b2e3d2a1a2a1b1a1c1a1d1","c3c2e3e2c3d2e3f2c3b2e3d2d5d6d5d4d5a5d5b5d5c5d5e5d5f5","c3c2e3e2c3d2e3f2c3b2e3d2b7b8b7b6b7a7b7c7","c3c2e3e2c3d2e3f2c3b2e3d2d3d4d3d2"};
+		for (int i = 6; i < startPlatser.length; i++) {
 
 		StandardBoard board = new StandardBoard();
 /*		for (int i = 0; i < LINE_ATTACKS.length; i++) {
@@ -49,6 +49,7 @@ public class RooksTest {
 
 		board.setBlackRookBoard(startPlatser[i]);
 		board.setWhitePawnBoard(6389270908594971928L);
+			board.setBlackPawnBoard(21990232555520L);
 		//board.setWhitePawnBoard(1L);
 		logger.debug("Board: {}", board.toString());
 		//Rooks rooks = new Rooks(Colour.BLACK, 0L,0L,0L);

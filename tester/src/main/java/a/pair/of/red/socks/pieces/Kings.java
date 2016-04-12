@@ -49,7 +49,6 @@ private static final Logger logger = LoggerFactory.getLogger(Kings.class);
 			possibility = tmpBoard & ~(tmpBoard - 1);
 		}
 		tmpBoard = board.getWhiteRookBoard()|board.getWhiteQueenBoard();
-		logger.debug("tmpBoard: {}",tmpBoard);
 		possibility = tmpBoard & ~(tmpBoard - 1);
 		while (possibility != 0) {
 			int index = Long.numberOfTrailingZeros(possibility);

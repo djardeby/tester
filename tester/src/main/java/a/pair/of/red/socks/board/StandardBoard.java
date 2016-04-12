@@ -79,30 +79,14 @@ String legalMoves = legalMoves(moveToAlgebra(moves.toString()));
 		String legal="";
 		for (int i = 0; i < moves.length(); i+=4) {
 			String move = moves.substring(i, i + 4);
-//			lastMoveStart = algebraToBoard(startSquare);
-//			String destinationSquare = moves.substring(i + 2, i + 4);
-			logger.debug("move: {}",move);
-//			logger.debug("destinationSquare: {}",destinationSquare);
-//			lastMoveDestination = algebraToBoard(destinationSquare);
 			long tmpDestination = lastMoveDestination;
 			long tmpStart = lastMoveStart;
 			makeMove(move);
-			if(move.equals("h4g4"))
-			logger.debug("toString(): {}",toString());
 			long king = kingBoard[isWhiteToMove() ? blackIndex:whiteIndex];
 			long unsafe = !isWhiteToMove()?getWhiteKing().unsafeForWhite(this):getBlackKing().unsafeForBlack(this);
-//			logger.debug("move: {}",move);
 			if ((king & unsafe)==0L) {
-				logger.debug("move: {}",move);
-				logger.debug("king: {}",king);
-				logger.debug("unsafe: {}",unsafe);
-
-
 				legal+= move;
 			} else {
-				logger.debug("king: {}",king);
-				logger.debug("unsafe: {}",unsafe);
-
 			}
 			undoMove();
 			lastMoveDestination= tmpDestination;
