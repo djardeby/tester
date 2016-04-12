@@ -1,6 +1,7 @@
 package a.pair.of.red.socks.pieces;
 
 import a.pair.of.red.socks.board.Colour;
+import a.pair.of.red.socks.board.StandardBoard;
 
 import static a.pair.of.red.socks.utils.Constants.*;
 
@@ -15,19 +16,19 @@ public class Pawns extends Piece {
 		this.setPawnBoard(pawnBoard);
 	}
 
-	public String findAllMoves(final long empty) {
-		return movePawnsOneStep(empty).append(movePawnsTwoSteps(empty)).append(pawnsAttackEast()).append(pawnsAttackWest()).toString();
+	public String findAllMoves(StandardBoard board) {
+		return movePawnsOneStep(board.getEmpty()).append(movePawnsTwoSteps(board.getEmpty())).append(pawnsAttackEast()).append(pawnsAttackWest()).toString();
 	}
 
 	private StringBuilder movePawnsOneStep(final long empty) {
-		long pawnMoves = (Colour.WHITE.equals(colour) ? (getPawnBoard() >> 8) : (getPawnBoard() << 8)) & empty;
+		long pawnMoves = (Colour.WHITE.equals(colour) ? ((getPawnBoard() >> 8)) : (getPawnBoard() << 8)) & empty;
 		return boardToMoves(0, pawnMoves, colour.getDirection());
 	}
 
 	private StringBuilder movePawnsTwoSteps(final long empty) {
-
 		long pawnMoves = (Colour.WHITE.equals(colour) ? (getPawnBoard() >> 16) & RANK_4 & empty >> 8
 				: (getPawnBoard() << 16) & RANK_5 & empty << 8) & empty;
+
 		return boardToMoves(0, pawnMoves, 2 * colour.getDirection());
 	}
 

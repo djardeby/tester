@@ -29,7 +29,9 @@ public class PawnsTest {
 		String expected = "0605161526253635464556556665767506041614262436344644565466647674";
 		long whiteBoard = Long.parseLong("000000000" + "11111111" + "00000000" + "00000000" + "00000000" + "00000000" + "00000000" + "00000000", 2);
 		Pawns sut = new Pawns(Colour.WHITE, whiteBoard ,0L,0L);
-		String actual = sut.findAllMoves(~whiteBoard);
+		StandardBoard board = new StandardBoard();
+		board.setWhitePawnBoard(whiteBoard);
+		String actual = sut.findAllMoves(board);
 		assertEquals("Returnerar inte rätt drag för vitt.", expected, actual);
 	}
 
@@ -38,7 +40,9 @@ public class PawnsTest {
 		String expected = "05041514252435344544555465647574";
 		long whiteBoard = Long.parseLong("000000000" + "00000000" + "11111111" + "00000000" + "00000000" + "00000000" + "00000000" + "00000000", 2);
 		Pawns sut = new Pawns(Colour.WHITE, whiteBoard,0L,0L);
-		String actual = sut.findAllMoves(~whiteBoard);
+		StandardBoard board = new StandardBoard();
+		board.setWhitePawnBoard(whiteBoard);
+		String actual = sut.findAllMoves(board);
 		assertEquals("Returnerar inte rätt drag för vitt.", expected, actual);
 	}
 
@@ -47,7 +51,10 @@ public class PawnsTest {
 		String expected = "05061516252635364546555665667576";
 		long blackBoard = Long.parseLong("000000000" + "00000000" + "11111111" + "00000000" + "00000000" + "00000000" + "00000000" + "00000000", 2);
 		Pawns sut = new Pawns(Colour.BLACK, blackBoard,0L,0L);
-		String actual = sut.findAllMoves(~blackBoard);
+		StandardBoard board = new StandardBoard();
+		board.setBlackPawnBoard(blackBoard);
+
+		String actual = sut.findAllMoves(board);
 		assertEquals("Returnerar inte rätt drag för svart.", expected, actual);
 	}
 
@@ -56,7 +63,9 @@ public class PawnsTest {
 		String expected = "0102111221223132414251526162717201031113212331334143515361637173";
 		long blackBoard = Long.parseLong("000000000" + "00000000" + "00000000" + "00000000" + "00000000" + "00000000" + "11111111" + "00000000", 2);
 		Pawns sut = new Pawns(Colour.BLACK, blackBoard,0L,0L);
-		String actual = sut.findAllMoves(~blackBoard);
+		StandardBoard board = new StandardBoard();
+		board.setBlackPawnBoard(blackBoard);
+		String actual = sut.findAllMoves(board);
 		assertEquals("Returnerar inte rätt drag för svart.", expected, actual);
 	}
 
@@ -66,7 +75,11 @@ public class PawnsTest {
 		long blackPawns = Long.parseLong("000000000" + "00000000" + "10000000" + "00000000" + "00000000" + "00000000" + "00000001" + "00000000", 2);
 		long whitePawns = Long.parseLong("000000000" + "10000000" + "00000000" + "00000000" + "00000000" + "00000001" + "00000000" + "00000000", 2);
 		Pawns sut = new Pawns(Colour.WHITE, whitePawns, blackPawns, 0L);
-		String actual = sut.findAllMoves(~(whitePawns | blackPawns));
+		StandardBoard board = new StandardBoard();
+		board.setWhitePawnBoard(whitePawns);
+		board.setBlackPawnBoard(blackPawns);
+
+		String actual = sut.findAllMoves(board);
 		assertEquals("Returnerar inte rätt drag för blockerad vit.", expected, actual);
 	}
 
@@ -76,7 +89,11 @@ public class PawnsTest {
 		long blackPawns = Long.parseLong("000000000" + "00000000" + "10000000" + "00000000" + "00000000" + "00000000" + "00000001" + "00000000", 2);
 		long whitePawns = Long.parseLong("000000000" + "10000000" + "00000000" + "00000000" + "00000000" + "00000001" + "00000000" + "00000000", 2);
 		Pawns sut = new Pawns(Colour.BLACK, blackPawns, whitePawns, 0L);
-		String actual = sut.findAllMoves(~(whitePawns | blackPawns));
+		StandardBoard board = new StandardBoard();
+		board.setWhitePawnBoard(whitePawns);
+		board.setBlackPawnBoard(blackPawns);
+
+		String actual = sut.findAllMoves(board);
 		assertEquals("Returnerar inte rätt drag för blockerad svart.", expected, actual);
 	}
 
@@ -86,7 +103,11 @@ public class PawnsTest {
 		long blackPawns = Long.parseLong("000000000" + "00000001" + "11000000" + "00000000" + "00000000" + "00000000" + "00000010" + "10000000", 2);
 		long whitePawns = Long.parseLong("000000000" + "10000000" + "00000000" + "00000100" + "00000000" + "00000001" + "00000000" + "00000000", 2);
 		Pawns sut = new Pawns(Colour.WHITE, whitePawns,whitePawns, blackPawns);
-		String actual = sut.findAllMoves(~(whitePawns | blackPawns));
+		StandardBoard board = new StandardBoard();
+		board.setWhitePawnBoard(whitePawns);
+		board.setBlackPawnBoard(blackPawns);
+
+		String actual = sut.findAllMoves(board);
 		assertEquals("Returnerar inte attack för blockerad vit.", expected, actual);
 	}
 
@@ -96,7 +117,11 @@ public class PawnsTest {
 		long whitePawns = Long.parseLong("000000000" + "11000001" + "00000000" + "00000000" + "00000000" + "00000011" + "00000010" + "10000000", 2);
 		long blackPawns = Long.parseLong("000000000" + "00000000" + "10000000" + "00000000" + "00100000" + "00000000" + "00000001" + "00000000", 2);
 		Pawns sut = new Pawns(Colour.BLACK, blackPawns,blackPawns, whitePawns);
-		String actual = sut.findAllMoves(~(whitePawns | blackPawns));
+		StandardBoard board = new StandardBoard();
+		board.setWhitePawnBoard(whitePawns);
+		board.setBlackPawnBoard(blackPawns);
+
+		String actual = sut.findAllMoves(board);
 		assertEquals("Returnerar attack drag för blockerad svart.", expected, actual);
 	}
 	@Test
@@ -106,7 +131,7 @@ public class PawnsTest {
 		board.setBlackKnightBoard(whitePawns);
 		logger.debug(board.toString());
 		Pawns sut = new Pawns(Colour.BLACK, 1L, 1L, 0L);
-		logger.debug("{}",sut.findAllMoves(~whitePawns));
+		logger.debug("{}",sut.findAllMoves(board));
 	}
 	private static long makeLong(String input) {
 		if(input.substring(0,1).equals("1")) {

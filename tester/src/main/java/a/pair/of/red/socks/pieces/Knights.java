@@ -1,6 +1,7 @@
 package a.pair.of.red.socks.pieces;
 
 import a.pair.of.red.socks.board.Colour;
+import a.pair.of.red.socks.board.StandardBoard;
 import a.pair.of.red.socks.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +15,7 @@ public class Knights extends Piece {
 		this.knightsBoard = knightsBoard;
 	}
 
-	public String findAllMoves(long empty) {
+	public String findAllMoves(StandardBoard board) {
 		StringBuilder moves = moveNorthEast();
 		moves.append(moveEastNorth());
 		moves.append(moveEastSouth());

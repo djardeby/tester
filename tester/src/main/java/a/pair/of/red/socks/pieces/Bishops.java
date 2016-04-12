@@ -1,7 +1,6 @@
 package a.pair.of.red.socks.pieces;
 
-import static a.pair.of.red.socks.utils.Constants.LINE_ATTACKS;
-
+import a.pair.of.red.socks.board.StandardBoard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +15,7 @@ public class Bishops extends SlidingPieces {
 		this.bishopsBoard=bishopsBoard;
 	}
 
-	public String findAllMoves(long empty) {
+	public String findAllMoves(StandardBoard board) {
 		String moves="";
 		long tmpBoard = bishopsBoard;
 		long possibility = tmpBoard & ~(tmpBoard - 1);
@@ -25,8 +24,8 @@ public class Bishops extends SlidingPieces {
 			int startFile = index%8;
 			int startRank = index/8;
 			String startSquare = "" + startFile + startRank;
-			moves += newBoardToMoves(lineAttacks((getOwnPieces() | getOtherPieces()), 2, index), startSquare).toString();
-			moves += newBoardToMoves(lineAttacks((getOwnPieces() | getOtherPieces()), 3, index), startSquare).toString();
+			moves += newBoardToMoves(lineAttacks((getOwnPieces() | getOtherPieces()), 2, index, getOwnPieces()), startSquare).toString();
+			moves += newBoardToMoves(lineAttacks((getOwnPieces() | getOtherPieces()), 3, index, getOwnPieces()), startSquare).toString();
 			tmpBoard &= ~possibility;
 			possibility = tmpBoard & ~(tmpBoard - 1);
 		}

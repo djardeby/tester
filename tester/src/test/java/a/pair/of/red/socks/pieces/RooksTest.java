@@ -32,8 +32,8 @@ public class RooksTest {
 	@Test
 	public void lineAttacks() throws Exception {
 //		rooks.lineAttacks(0L,0,0);
-		long[] startPlatser={0x80L,0x8000000000000000L,0x1L,0x100000000000000L,134217728};
-		String[] expected ={"h8h7h8h6h8e8h8f8h8g8","h1h2h1g1","a8a7a8b8a8c8a8d8","a1a2a1b1a1c1a1d1","d5d6d5d4d5a5d5b5d5c5d5e5d5f5"};
+		long[] startPlatser={0x80L,0x8000000000000000L,0x1L,0x100000000000000L,134217728,512L};
+		String[] expected ={"h8h7h8h6h8e8h8f8h8g8","h1h2h1g1","a8a7a8b8a8c8a8d8","a1a2a1b1a1c1a1d1","d5d6d5d4d5a5d5b5d5c5d5e5d5f5","b7b8b7b6b7a7b7c7"};
 		for (int i = 0; i < startPlatser.length; i++) {
 
 		StandardBoard board = new StandardBoard();

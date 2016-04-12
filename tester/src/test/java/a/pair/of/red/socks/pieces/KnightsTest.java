@@ -42,7 +42,7 @@ public class KnightsTest {
 		String expected = "33413352335433453325331433123321";
 		long knightsBoard = Long.parseLong("000000000" + "00000000" + "00000000" + "00000000" + "00001000" + "00000000" + "00000000" + "00000000", 2);
 		Knights knights = new Knights(Colour.WHITE, knightsBoard,0L,0L);
-		String actual = knights.findAllMoves(~knightsBoard);
+		String actual = knights.findAllMoves(new StandardBoard());
 		assertEquals("Felaktiga drag för springare.", expected, actual);
 	}
 
@@ -52,7 +52,7 @@ public class KnightsTest {
 		long knightsBoardWhite = Long.parseLong("000000000" + "00000000" + "00000000" + "00000000" + "00001000" + "00000000" + "00010000" + "00000000", 2);
 		long knightsBoardBlack = Long.parseLong("000000000" + "00000000" + "00000000" + "00000000" + "00000000" + "00000000" + "00000100" + "00000000", 2);
 		Knights knights = new Knights(Colour.WHITE, knightsBoardWhite,knightsBoardWhite,knightsBoardBlack);
-		String actual = knights.findAllMoves(~(knightsBoardWhite|knightsBoardBlack));
+		String actual = knights.findAllMoves(new StandardBoard());
 		assertEquals("Felaktiga drag för springare.", expected, actual);
 	}
 
@@ -63,7 +63,7 @@ public class KnightsTest {
 		logger.debug("Hörnen: {}",Long.toBinaryString(knightsBoardWhite));
 //		long knightsBoardBlack = Long.parseLong("000000000" + "00000000" + "00000000" + "00000000" + "00000000" + "00000000" + "00000000" + "00000000", 2);
 		Knights knights = new Knights(Colour.BLACK, knightsBoardWhite,knightsBoardWhite,0L);
-		String actual = knights.findAllMoves(~(knightsBoardWhite));
+		String actual = knights.findAllMoves(new StandardBoard());
 		assertEquals("Felaktiga drag för springare.", expected, actual);
 	}
 

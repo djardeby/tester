@@ -1,5 +1,6 @@
 package a.pair.of.red.socks.pieces;
 
+import a.pair.of.red.socks.board.StandardBoard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +15,7 @@ public class Queens extends SlidingPieces {
 		this.queensBoard=queensBoard;
 	}
 
-	public String findAllMoves(long empty) {
+	public String findAllMoves(StandardBoard board) {
 		String moves="";
 		long tmpBoard = queensBoard;
 		long possibility = tmpBoard & ~(tmpBoard - 1);
@@ -23,10 +24,10 @@ public class Queens extends SlidingPieces {
 			int startFile = index%8;
 			int startRank = index/8;
 			String startSquare = "" + startFile + startRank;
-			moves += newBoardToMoves(lineAttacks((getOwnPieces() | getOtherPieces()), 0, index), startSquare).toString();
-			moves += newBoardToMoves(lineAttacks((getOwnPieces() | getOtherPieces()), 1, index), startSquare).toString();
-			moves += newBoardToMoves(lineAttacks((getOwnPieces() | getOtherPieces()), 2, index), startSquare).toString();
-			moves += newBoardToMoves(lineAttacks((getOwnPieces() | getOtherPieces()), 3, index), startSquare).toString();
+			moves += newBoardToMoves(lineAttacks((getOwnPieces() | getOtherPieces()), 0, index, getOwnPieces()), startSquare).toString();
+			moves += newBoardToMoves(lineAttacks((getOwnPieces() | getOtherPieces()), 1, index, getOwnPieces()), startSquare).toString();
+			moves += newBoardToMoves(lineAttacks((getOwnPieces() | getOtherPieces()), 2, index, getOwnPieces()), startSquare).toString();
+			moves += newBoardToMoves(lineAttacks((getOwnPieces() | getOtherPieces()), 3, index, getOwnPieces()), startSquare).toString();
 			tmpBoard &= ~possibility;
 			possibility = tmpBoard & ~(tmpBoard - 1);
 		}

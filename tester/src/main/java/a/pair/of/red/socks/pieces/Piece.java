@@ -1,6 +1,7 @@
 package a.pair.of.red.socks.pieces;
 
 import a.pair.of.red.socks.board.Colour;
+import a.pair.of.red.socks.board.StandardBoard;
 
 public abstract class Piece {
 
@@ -15,7 +16,7 @@ public abstract class Piece {
 		this.otherPieces= otherPieces;
 	}
 
-	protected abstract String findAllMoves(long empty);
+	protected abstract String findAllMoves(StandardBoard board);
 
 	protected StringBuilder boardToMoves(final int sidesteps, long pieceBoard, final int forwardsteps) {
 		StringBuilder moves = new StringBuilder();
