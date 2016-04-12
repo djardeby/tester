@@ -104,11 +104,6 @@ String legalMoves = legalMoves(moveToAlgebra(moves.toString()));
 		boolean successs = whiteToMove ? movePieces(lastMoveStart,whiteIndex) : movePieces(lastMoveStart,blackIndex);
 		if (successs)
 			whiteToMove = !whiteToMove;
-		if("b4f4".equals(move)) {
-			logger.debug("algebraToBoard(move.substring(2, 4)): {}",algebraToBoard(move.substring(2, 4)));
-			logger.debug("algebraToBoard(move.substring(0, 2)): {}",algebraToBoard(move.substring(0, 2)));
-			logger.debug("rookBoard: {}",rookBoard[whiteIndex]);
-		}
 	}
 
 /*	private boolean capture() {

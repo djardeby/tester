@@ -85,6 +85,7 @@ public class StandardBoardTest {
 
 		assertEquals("Felaktigt antal drag", 8902, numberOfMoves);
 	}
+	//https://chessprogramming.wikispaces.com/Perft+Results
 	@Test
 	public void perftInit4() throws Exception {
 		sut = null;
@@ -95,28 +96,24 @@ public class StandardBoardTest {
 		sut.setWhitePawnBoard(22517998170406912L);
 		sut.setWhiteRookBoard(8589934592L);
 		sut.setWhiteKingBoard(16777216L);
-//		logger.debug("sut.toString(): {}",sut.toString());
 		String moves = sut.moves();
 		logger.debug("moves: {}",moves);
 		assertEquals("Felaktigt antal drag", (14), moves.length()/4);
 		String moreMoves = "";
 		String beforeBoard=sut.toString();
 		for (int i = 0; i < moves.length(); i += 4) {
-			logger.debug("======================================================================");
-			logger.debug("sut.toString(): {}",sut.toString());
-
 			String nextMove = moves.substring(i, i + 4);
-			logger.debug("nextMove: {}",nextMove);
 			sut.makeMove(nextMove);
-//			logger.debug("sut.toString(): {}",sut.toString());
 			String newMoves = sut.moves();
+			logger.debug("nextMove: {}",nextMove);
 			logger.debug("newMoves: {}",newMoves);
-			logger.debug("antal newMoves: {}",newMoves.length()/4);
 			moreMoves += newMoves;
 			sut.undoMove();
 			assertEquals("Brädet ska återställas",beforeBoard,sut.toString());
 		}
+		logger.debug("moreMoves: {}",moreMoves);
 		assertEquals("Felaktigt antal drag", 191, moreMoves.length() / 4);
+		assertTrue("En passant missades", moreMoves.contains("f4e3"));
 /*
 		String moreMoves = "";
 		String evenMoreMoves = "";
