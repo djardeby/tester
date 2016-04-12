@@ -26,7 +26,6 @@ private static final Logger logger = LoggerFactory.getLogger(Kings.class);
 		long moveBoard = ((tmpBoard & ~FILE_H) << 1) | ((tmpBoard & ~FILE_A) >> 1);
 		tmpBoard |= moveBoard;
 		moveBoard |= (tmpBoard >> 8) | (tmpBoard << 8);
-
 		long attacks = moveBoard & ~getOwnPieces() & (Colour.WHITE.equals(colour)?~unsafeForWhite(board):~unsafeForBlack(board));
 		int index = Long.numberOfTrailingZeros(kingBoard);
 		int startFile = index%8;

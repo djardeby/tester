@@ -50,6 +50,7 @@ public class StandardBoardTest {
 	@Test
 	public void perftInit1() throws Exception {
 		String moves = sut.moves();
+
 		assertEquals("Felaktigt antal drag", 20, moves.length() / 4);
 	}
 
@@ -58,8 +59,11 @@ public class StandardBoardTest {
 		String moves = sut.moves();
 		String moreMoves = "";
 		for (int i = 0; i < moves.length(); i += 4) {
-			sut.makeMove(moves.substring(i, i + 4));
-			moreMoves += sut.moves();
+			String nextMove = moves.substring(i, i + 4);
+			sut.makeMove(nextMove);
+			String newMoves = sut.moves();
+			logger.debug("move: {} --> {}",nextMove,newMoves.length()/4);
+			moreMoves += newMoves;
 			sut.undoMove();
 		}
 		assertEquals("Felaktigt antal drag", 400, moreMoves.length() / 4);
@@ -72,11 +76,17 @@ public class StandardBoardTest {
 		String evenMoreMoves = "";
 		int numberOfMoves=0;
 		for (int i = 0; i < moves.length(); i += 4) {
-			sut.makeMove(moves.substring(i, i + 4));
-			moreMoves = sut.moves();
+			String nextMove = moves.substring(i, i + 4);
+			sut.makeMove(nextMove);
+			String newMoves = sut.moves();
+			logger.debug("move: {} --> {}",nextMove,newMoves.length()/4);
+			moreMoves = newMoves;
 			for (int j = 0; j < moreMoves.length(); j += 4) {
-				sut.makeMove(moreMoves.substring(j, j + 4));
+				String secondMove = moreMoves.substring(j, j + 4);
+				sut.makeMove(secondMove);
 				evenMoreMoves = sut.moves();
+				logger.debug("evenMoreMoves: {}",evenMoreMoves);
+				logger.debug("secondMove: {} --> {}",secondMove,(evenMoreMoves.length()/4));
 				sut.undoMove();
 				numberOfMoves+=evenMoreMoves.length()/4;
 			}
