@@ -21,8 +21,7 @@ public class Constants {
 	public static final long FILE_AB = FILE_A | FILE_B;
 	public static final long RANK_78 = RANK_7 | RANK_8;
 	public static final long RANK_12 = RANK_1 | RANK_2;
-	public static final byte UPPER =0;
-	public static final byte LOWER =1;
+	public static final long KING_SPAN = 0x70507L;
 // http://cinnamonchess.altervista.org/bitboard_calculator/Calc.html
 
 	public static final long[/*square*/][/*linetype*/][/*upper or lower*/] LINE_ATTACKS={

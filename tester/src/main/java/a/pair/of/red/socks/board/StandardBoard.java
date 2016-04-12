@@ -67,6 +67,10 @@ private static final int blackIndex=1;
 		Queens blackQueens = new Queens(Colour.BLACK,queensBoard[blackIndex],getBlackPieces(),getWhitePieces());
 		Queens queens = isWhiteToMove()?whiteQueens:blackQueens;
 		moves.append(queens.findAllMoves(getEmpty()));
+		Kings whiteKings = new Kings(Colour.WHITE,kingBoard[whiteIndex],getWhitePieces(),getBlackPieces());
+		Kings blackKings = new Kings(Colour.BLACK,kingBoard[blackIndex],getBlackPieces(),getWhitePieces());
+		Kings kings = isWhiteToMove()?whiteKings:blackKings;
+		moves.append(kings.findAllMoves(getEmpty()));
 		return moveToAlgebra(moves.toString());
 	}
 

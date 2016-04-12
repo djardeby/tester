@@ -66,7 +66,6 @@ public class StandardBoardTest {
 	}
 
 	@Test
-
 	public void perftInit3() throws Exception {
 		String moves = sut.moves();
 		String moreMoves = "";
@@ -85,5 +84,37 @@ public class StandardBoardTest {
 		}
 
 		assertEquals("Felaktigt antal drag", 8902, numberOfMoves);
+	}
+	@Test
+	public void perftInit4() throws Exception {
+		sut = null;
+		sut = new StandardBoard();
+		sut.setBlackPawnBoard(137439478784L);
+		sut.setBlackRookBoard(2147483648L);
+		sut.setBlackKingBoard(549755813888L);
+		sut.setWhitePawnBoard(22517998170406912L);
+		sut.setWhiteRookBoard(8589934592L);
+		sut.setWhiteKingBoard(16777216L);
+		logger.debug("sut.toString(): {}",sut.toString());
+		String moves = sut.moves();
+		assertEquals("Felaktigt antal drag", (14), moves.length()/4);
+/*
+		String moreMoves = "";
+		String evenMoreMoves = "";
+		int numberOfMoves=0;
+		for (int i = 0; i < moves.length(); i += 4) {
+			sut.makeMove(moves.substring(i, i + 4));
+			moreMoves = sut.moves();
+			for (int j = 0; j < moreMoves.length(); j += 4) {
+				sut.makeMove(moreMoves.substring(j, j + 4));
+				evenMoreMoves = sut.moves();
+				sut.undoMove();
+				numberOfMoves+=evenMoreMoves.length()/4;
+			}
+			sut.undoMove();
+		}
+
+		assertEquals("Felaktigt antal drag", 8902, numberOfMoves);
+*/
 	}
 }
