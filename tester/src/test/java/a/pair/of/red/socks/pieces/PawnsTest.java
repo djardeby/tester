@@ -124,15 +124,6 @@ public class PawnsTest {
 		String actual = sut.findAllMoves(board);
 		assertEquals("Returnerar attack drag för blockerad svart.", expected, actual);
 	}
-	@Test
-	public void test() {
-		long whitePawns = makeLong("000000000" + "00000000" + "00000000" + "00000000" + "00000000" + "00000000" + "00000000" + "00000001");
-		StandardBoard board = new StandardBoard();
-		board.setBlackKnightBoard(whitePawns);
-		logger.debug(board.toString());
-		Pawns sut = new Pawns(Colour.BLACK, 1L, 1L, 0L);
-		logger.debug("{}",sut.findAllMoves(board));
-	}
 	private static long makeLong(String input) {
 		if(input.substring(0,1).equals("1")) {
 			return -1 * (Long.MAX_VALUE - Long.parseLong(input.substring(1), 2) + 1);

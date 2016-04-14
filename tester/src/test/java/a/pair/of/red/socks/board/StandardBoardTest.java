@@ -32,18 +32,22 @@ public class StandardBoardTest {
 	@Test
 	public void makeMove() throws Exception {
 		sut.makeMove("a2a4");
-		logger.debug("sut.toString(): {}",sut.toString());
+		//logger.debug("sut.toString(): {}",sut.toString());
 	}
 
 	@Test
 	public void undoMove() throws Exception {
+		String expected = sut.toString();
 		sut.makeMove("c2c4");
 		sut.makeMove("a7a5");
 		sut.makeMove("d1b3");
 
 		sut.undoMove();
+		sut.undoMove();
+		sut.undoMove();
 		assertTrue("Det ska vara vits tur.",sut.isWhiteToMove());
-		logger.debug("sut.toString(): {}",sut.toString());
+		assertEquals("Brädet ska var återställt.", expected,sut.toString());
+		//logger.debug("sut.toString(): {}",sut.toString());
 
 	}
 
@@ -62,7 +66,7 @@ public class StandardBoardTest {
 			String nextMove = moves.substring(i, i + 4);
 			sut.makeMove(nextMove);
 			String newMoves = sut.moves();
-			logger.debug("move: {} --> {}",nextMove,newMoves.length()/4);
+			//logger.debug("move: {} --> {}",nextMove,newMoves.length()/4);
 			moreMoves += newMoves;
 			sut.undoMove();
 		}
@@ -77,20 +81,27 @@ public class StandardBoardTest {
 		int numberOfMoves=0;
 		for (int i = 0; i < moves.length(); i += 4) {
 			String nextMove = moves.substring(i, i + 4);
+			String beforeFirstMove=sut.toString();
 			sut.makeMove(nextMove);
 			String newMoves = sut.moves();
-			logger.debug("move: {} --> {}",nextMove,newMoves.length()/4);
+			//logger.debug("move: {} --> {}",nextMove,newMoves.length()/4);
 			moreMoves = newMoves;
 			for (int j = 0; j < moreMoves.length(); j += 4) {
 				String secondMove = moreMoves.substring(j, j + 4);
+				String beforeSecondMove=sut.toString();
 				sut.makeMove(secondMove);
 				evenMoreMoves = sut.moves();
-				logger.debug("evenMoreMoves: {}",evenMoreMoves);
-				logger.debug("secondMove: {} --> {}",secondMove,(evenMoreMoves.length()/4));
+				//logger.debug("secondMove: {} --> {}",secondMove,(evenMoreMoves.length()/4));
+	/*			if(nextMove.equals("d2d3") && secondMove.equals("a7a6")) {
+					logger.debug("evenMoreMoves: {}",evenMoreMoves);
+				}
+				*/
 				sut.undoMove();
+				assertEquals("Brädet ska återställas innan nästa drag.",beforeSecondMove,sut.toString());
 				numberOfMoves+=evenMoreMoves.length()/4;
 			}
 			sut.undoMove();
+			assertEquals("Brädet ska återställas innan nästa runda.",beforeFirstMove,sut.toString());
 		}
 
 		assertEquals("Felaktigt antal drag", 8902, numberOfMoves);
@@ -107,7 +118,7 @@ public class StandardBoardTest {
 		sut.setWhiteRookBoard(8589934592L);
 		sut.setWhiteKingBoard(16777216L);
 		String moves = sut.moves();
-		logger.debug("moves: {}",moves);
+		//logger.debug("moves: {}",moves);
 		assertEquals("Felaktigt antal drag", (14), moves.length()/4);
 		String moreMoves = "";
 		String beforeBoard=sut.toString();
@@ -115,15 +126,14 @@ public class StandardBoardTest {
 			String nextMove = moves.substring(i, i + 4);
 			sut.makeMove(nextMove);
 			String newMoves = sut.moves();
-			logger.debug("nextMove: {}",nextMove);
-			logger.debug("newMoves: {}",newMoves);
+			//logger.debug("nextMove: {}",nextMove);
+			//logger.debug("newMoves: {}",newMoves);
 			moreMoves += newMoves;
 			sut.undoMove();
 			assertEquals("Brädet ska återställas",beforeBoard,sut.toString());
 		}
-		logger.debug("moreMoves: {}",moreMoves);
+		//logger.debug("moreMoves: {}",moreMoves);
 		assertEquals("Felaktigt antal drag", 191, moreMoves.length() / 4);
-		assertTrue("En passant missades", moreMoves.contains("f4e3"));
 /*
 		String moreMoves = "";
 		String evenMoreMoves = "";

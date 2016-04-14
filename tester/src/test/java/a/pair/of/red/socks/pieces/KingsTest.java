@@ -30,8 +30,8 @@ public class KingsTest {
 		StandardBoard sut = new StandardBoard();
 		sut.setWhiteKingBoard(1L);
 		String moves = sut.moves();
-		logger.debug("moves: {}", moves.length() / 4);
-		logger.debug("sut.toString(): {}", sut.toString());
+	//	logger.debug("moves: {}", moves.length() / 4);
+	//	logger.debug("sut.toString(): {}", sut.toString());
 	}
 
 	@Test
@@ -41,9 +41,9 @@ public class KingsTest {
 		sut.setBlackKingBoard(4L);
 		sut.setWhiteToMove(false);
 		String moves = sut.moves();
-		logger.debug("number of moves: {}", moves.length() / 4);
+	/*	logger.debug("number of moves: {}", moves.length() / 4);
 		logger.debug("moves: {}", moves);
-		logger.debug("sut.toString(): {}", sut.toString());
+		logger.debug("sut.toString(): {}", sut.toString());*/
 		assertEquals("Kungen kan inte flytta till schack",3,moves.length()/4);
 	}
 	@Test
@@ -52,9 +52,9 @@ public class KingsTest {
 		sut.setBlackPawnBoard(4785074604081152L);
 		sut.setWhiteKingBoard(288230376151711744L);
 		String moves = sut.moves();
-		logger.debug("number of moves: {}", moves.length() / 4);
+	/*	logger.debug("number of moves: {}", moves.length() / 4);
 		logger.debug("moves: {}", moves);
-		logger.debug("sut.toString(): {}", sut.toString());
+		logger.debug("sut.toString(): {}", sut.toString());*/
 		assertEquals("Kungen kan inte flytta till schack",3,moves.length()/4);
 	}
 	@Test
@@ -64,9 +64,9 @@ public class KingsTest {
 		sut.setBlackKingBoard(4L);
 		sut.setWhiteToMove(false);
 		String moves = sut.moves();
-		logger.debug("number of moves: {}", moves.length() / 4);
+/*		logger.debug("number of moves: {}", moves.length() / 4);
 		logger.debug("moves: {}", moves);
-		logger.debug("sut.toString(): {}", sut.toString());
+		logger.debug("sut.toString(): {}", sut.toString());*/
 		assertEquals("Kungen kan inte flytta till schack",3,moves.length()/4);
 	}
 
@@ -77,9 +77,9 @@ public class KingsTest {
 		sut.setBlackKingBoard(134217728L);
 		sut.setWhiteToMove(false);
 		String moves = sut.moves();
-		logger.debug("number of moves: {}", moves.length() / 4);
+	/*	logger.debug("number of moves: {}", moves.length() / 4);
 		logger.debug("moves: {}", moves);
-		logger.debug("sut.toString(): {}", sut.toString());
+		logger.debug("sut.toString(): {}", sut.toString());*/
 		assertEquals("Kungen kan inte flytta till schack",2,moves.length()/4);
 	}
 
@@ -90,9 +90,9 @@ public class KingsTest {
 		sut.setWhiteKingBoard(134217728L);
 		sut.setBlackPawnBoard(4194304L);
 		String moves = sut.moves();
-		logger.debug("number of moves: {}", moves.length() / 4);
+	/*	logger.debug("number of moves: {}", moves.length() / 4);
 		logger.debug("moves: {}", moves);
-		logger.debug("sut.toString(): {}", sut.toString());
+		logger.debug("sut.toString(): {}", sut.toString());*/
 		assertEquals("Kungen kan inte flytta till schack",5,moves.length()/4);
 	}
 
@@ -103,9 +103,9 @@ public class KingsTest {
 		sut.setBlackKingBoard(134217728L);
 		sut.setWhiteToMove(false);
 		String moves = sut.moves();
-		logger.debug("number of moves: {}", moves.length() / 4);
+	/*	logger.debug("number of moves: {}", moves.length() / 4);
 		logger.debug("moves: {}", moves);
-		logger.debug("sut.toString(): {}", sut.toString());
+		logger.debug("sut.toString(): {}", sut.toString());*/
 		assertEquals("Kungen kan inte flytta till schack",3,moves.length()/4);
 	}
 	@Test
@@ -115,9 +115,9 @@ public class KingsTest {
 		sut.setBlackKingBoard(134217728L);
 		sut.setWhiteToMove(false);
 		String moves = sut.moves();
-		logger.debug("number of moves: {}", moves.length() / 4);
+	/*	logger.debug("number of moves: {}", moves.length() / 4);
 		logger.debug("moves: {}", moves);
-		logger.debug("sut.toString(): {}", sut.toString());
+		logger.debug("sut.toString(): {}", sut.toString());*/
 		assertEquals("Kungen kan inte flytta till schack",5,moves.length()/4);
 	}
 

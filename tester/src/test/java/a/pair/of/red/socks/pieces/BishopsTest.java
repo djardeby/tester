@@ -50,21 +50,15 @@ public class BishopsTest {
 		board.setBlackBishopBoard(startPlatser[i]);
 		board.setWhitePawnBoard(6389270908594955544L);  //6389270908594971928L);
 		//board.setWhitePawnBoard(1L);
-		logger.debug("Board: {}", board.toString());
+		//logger.debug("Board: {}", board.toString());
 		//Bishops bishops = new Bishops(Colour.BLACK, 0L,0L,0L);
 		board.setWhiteToMove(false);
 		//board.moves();
 			String actual = board.moves();
-			logger.debug("Moves: {}", actual);
+			//logger.debug("Moves: {}", actual);
 			assertEquals("Felaktiga drag",expected[i], actual);
 		}
 
 	}
 
-	@Test
-	public void trailingZeroes() {
-		for (int i = 0; i < 128; i++) {
-			logger.debug("Long.numberOfTrailingZeros(i): {}",Long.numberOfTrailingZeros(i));
-		}
-	}
 }

@@ -33,8 +33,8 @@ public class KnightsTest {
 //		board.setWhitePawnBoard(0L);
 //		board.setBlackPawnBoard(0L);
 		assert board != null;
-		logger.debug("Nytt bräde {}", board.toString());
-		logger.debug("Nytt bräde {}", board.moves().length()/4);
+		//logger.debug("Nytt bräde {}", board.toString());
+		//logger.debug("Nytt bräde {}", board.moves().length()/4);
 	}
 
 	@Test
@@ -60,8 +60,8 @@ public class KnightsTest {
 	public void knightsDontMoveOutsideBoard() {
 		String expected = "07150726002100127062705177567765";
 		long knightsBoardWhite = makeLong("100000001" + "00000000" + "00000000" + "00000000" + "00000000" + "00000000" + "00000000" + "10000001");
-		logger.debug("Hörnen: {}",Long.toBinaryString(knightsBoardWhite));
-//		long knightsBoardBlack = Long.parseLong("000000000" + "00000000" + "00000000" + "00000000" + "00000000" + "00000000" + "00000000" + "00000000", 2);
+	//	logger.debug("Hörnen: {}",Long.toBinaryString(knightsBoardWhite));
+///		long knightsBoardBlack = Long.parseLong("000000000" + "00000000" + "00000000" + "00000000" + "00000000" + "00000000" + "00000000" + "00000000", 2);
 		Knights knights = new Knights(Colour.BLACK, knightsBoardWhite,knightsBoardWhite,0L);
 		String actual = knights.findAllMoves(new StandardBoard());
 		assertEquals("Felaktiga drag för springare.", expected, actual);

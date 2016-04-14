@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
+import java.util.Stack;
 
 public class StandardBoard implements Board {
 	private static final Logger logger = LoggerFactory.getLogger(StandardBoard.class);
@@ -23,8 +24,9 @@ private static final int blackIndex=1;
 	private boolean hasMoved = true;
 	private long blackPieces;
 	public long whitePieces;
-	private long lastMoveStart;
-	private long lastMoveDestination;
+	private long lastMoveStart=-1L;
+	private long lastMoveDestination=-1L;
+	private Stack<Long> olderMoves = new Stack<>();
 
 	public StandardBoard() {
 
@@ -98,6 +100,10 @@ String legalMoves = legalMoves(moveToAlgebra(moves.toString()));
 
 	public void makeMove(String move) {
 
+if(lastMoveStart != -1L) {
+	olderMoves.push(lastMoveStart);
+	olderMoves.push(lastMoveDestination);
+}
 
 			lastMoveDestination = algebraToBoard(move.substring(2, 4));
 		lastMoveStart = algebraToBoard(move.substring(0, 2));
@@ -139,8 +145,14 @@ String legalMoves = legalMoves(moveToAlgebra(moves.toString()));
 
 	public void undoMove() {
 		boolean successs = whiteToMove ?  movePieces(lastMoveDestination,blackIndex) : movePieces(lastMoveDestination,whiteIndex);
-		if (successs)
+		if (successs) {
+			if (!olderMoves.isEmpty()) {
+				lastMoveDestination=olderMoves.pop();
+				lastMoveStart=olderMoves.pop();
+			}
 			whiteToMove = !whiteToMove;
+
+		}
 
 	}
 

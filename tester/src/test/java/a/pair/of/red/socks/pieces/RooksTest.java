@@ -51,12 +51,11 @@ public class RooksTest {
 		board.setWhitePawnBoard(6389270908594971928L);
 			board.setBlackPawnBoard(21990232555520L);
 		//board.setWhitePawnBoard(1L);
-		logger.debug("Board: {}", board.toString());
 		//Rooks rooks = new Rooks(Colour.BLACK, 0L,0L,0L);
 		board.setWhiteToMove(false);
 		//board.moves();
 			String actual = board.moves();
-			logger.debug("Moves: {}", actual);
+			//logger.debug("Moves: {}", actual);
 			assertEquals("Felaktiga drag",expected[i], actual);
 		}
 
