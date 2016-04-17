@@ -106,9 +106,52 @@ public class StandardBoardTest {
 
 		assertEquals("Felaktigt antal drag", 8902, numberOfMoves);
 	}
-	//https://chessprogramming.wikispaces.com/Perft+Results
 	@Test
 	public void perftInit4() throws Exception {
+		String moves = sut.moves();
+		String moreMoves = "";
+		String evenMoreMoves = "";
+		int numberOfMoves=0;
+		for (int i = 0; i < moves.length(); i += 4) {
+			String firstMove = moves.substring(i, i + 4);
+			String beforeFirstMove=sut.toString();
+			sut.makeMove(firstMove);
+			String newMoves = sut.moves();
+			//logger.debug("move: {} --> {}",firstMove,newMoves.length()/4);
+			moreMoves = newMoves;
+			for (int j = 0; j < moreMoves.length(); j += 4) {
+				String secondMove = moreMoves.substring(j, j + 4);
+				String beforeSecondMove=sut.toString();
+				sut.makeMove(secondMove);
+				evenMoreMoves = sut.moves();
+				//logger.debug("secondMove: {} --> {}",secondMove,(evenMoreMoves.length()/4));
+	/*			if(firstMove.equals("d2d3") && secondMove.equals("a7a6")) {
+					logger.debug("evenMoreMoves: {}",evenMoreMoves);
+				}
+				*/
+				for (int k = 0; k < evenMoreMoves.length(); k+=4) {
+					String thirdMove = evenMoreMoves.substring(k,k+4);
+					String beforeThirdMove=sut.toString();
+					sut.makeMove(thirdMove);
+					String thirdMoves = sut.moves();
+					logger.debug("{} {} - {}{}",firstMove,secondMove,thirdMove,sut.toString());
+					sut.undoMove();
+					assertEquals("Brädet ska alltid återställas.",beforeThirdMove,sut.toString());
+					numberOfMoves+=thirdMoves.length()/4;
+				}
+				sut.undoMove();
+				assertEquals("Brädet ska återställas innan nästa drag.",beforeSecondMove,sut.toString());
+				numberOfMoves+=evenMoreMoves.length()/4;
+			}
+			sut.undoMove();
+			assertEquals("Brädet ska återställas innan nästa runda.",beforeFirstMove,sut.toString());
+		}
+
+		assertEquals("Felaktigt antal drag", 197281, numberOfMoves);
+	}
+	//https://chessprogramming.wikispaces.com/Perft+Results
+	@Test
+	public void perftPosition2() throws Exception {
 		sut = null;
 		sut = new StandardBoard();
 		sut.setBlackPawnBoard(137439478784L);
@@ -152,5 +195,15 @@ public class StandardBoardTest {
 
 		assertEquals("Felaktigt antal drag", 8902, numberOfMoves);
 */
+	}
+
+	@Test
+	public void captureTest(){
+		 sut = new StandardBoard();
+		sut.setBlackPawnBoard(4096L);
+		sut.setWhiteBishopBoard(549755813888L);
+		sut.makeMove("h4e7");
+		sut.undoMove();
+		logger.debug(sut.toString());
 	}
 }

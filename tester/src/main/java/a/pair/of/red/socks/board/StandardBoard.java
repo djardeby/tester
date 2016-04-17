@@ -9,24 +9,24 @@ import java.util.Stack;
 
 public class StandardBoard implements Board {
 	private static final Logger logger = LoggerFactory.getLogger(StandardBoard.class);
-private static final int whiteIndex=0;
-private static final int blackIndex=1;
-
+	private static final int whiteIndex = 0;
+	private static final int blackIndex = 1;
+	public long whitePieces;
 	private long EMPTY = 0L;
 	private long OCCUPIED = 0L;
-	private long[] pawnBoard = { 0L, 0L};
-	private long[] rookBoard = { 0L, 0L};
-	private long[] knightBoard = { 0L, 0L};
-	private long[] bishopBoard = { 0L, 0L};
-	private long[] queensBoard = { 0L, 0L};
-	private long[] kingBoard = { 0L, 0L};
+	private long[] pawnBoard = {0L, 0L};
+	private long[] rookBoard = {0L, 0L};
+	private long[] knightBoard = {0L, 0L};
+	private long[] bishopBoard = {0L, 0L};
+	private long[] queensBoard = {0L, 0L};
+	private long[] kingBoard = {0L, 0L};
 	private boolean whiteToMove = true;
 	private boolean hasMoved = true;
 	private long blackPieces;
-	public long whitePieces;
-	private long lastMoveStart=-1L;
-	private long lastMoveDestination=-1L;
+	private long lastMoveStart = -1L;
+	private long lastMoveDestination = -1L;
 	private Stack<Long> olderMoves = new Stack<>();
+	private long captured = 0L;
 
 	public StandardBoard() {
 
@@ -51,7 +51,7 @@ private static final int blackIndex=1;
 		StringBuilder moves = new StringBuilder();
 		Kings whiteKings = getWhiteKing();
 		Kings blackKings = getBlackKing();
-		Kings kings = isWhiteToMove()?whiteKings:blackKings;
+		Kings kings = isWhiteToMove() ? whiteKings : blackKings;
 		moves.append(kings.findAllMoves(this));
 		Pawns whitePawns = new Pawns(Colour.WHITE, getWhitePawnBoard(), getWhitePieces(), getBlackPieces());
 		Pawns blackPawns = new Pawns(Colour.BLACK, getBlackPawnBoard(), getBlackPieces(), getWhitePieces());
@@ -61,38 +61,49 @@ private static final int blackIndex=1;
 		Knights blackKnights = new Knights(Colour.BLACK, getBlackKnightBoard(), getBlackPieces(), getWhitePieces());
 		Knights knights = isWhiteToMove() ? whiteKnights : blackKnights;
 		moves.append(knights.findAllMoves(this));
-		Rooks whiteRooks = new Rooks(Colour.WHITE,rookBoard[whiteIndex],getWhitePieces(),getBlackPieces());
-		Rooks blackRooks = new Rooks(Colour.BLACK,rookBoard[blackIndex],getBlackPieces(),getWhitePieces());
-		Rooks rooks = isWhiteToMove()?whiteRooks:blackRooks;
+		Rooks whiteRooks = new Rooks(Colour.WHITE, rookBoard[whiteIndex], getWhitePieces(), getBlackPieces());
+		Rooks blackRooks = new Rooks(Colour.BLACK, rookBoard[blackIndex], getBlackPieces(), getWhitePieces());
+		Rooks rooks = isWhiteToMove() ? whiteRooks : blackRooks;
 		moves.append(rooks.findAllMoves(this));
-		Bishops whiteBishops = new Bishops(Colour.WHITE,bishopBoard[whiteIndex],getWhitePieces(),getBlackPieces());
-		Bishops blackBishops = new Bishops(Colour.BLACK,bishopBoard[blackIndex],getBlackPieces(),getWhitePieces());
-		Bishops bishops = isWhiteToMove()?whiteBishops:blackBishops;
+		Bishops whiteBishops = new Bishops(Colour.WHITE, bishopBoard[whiteIndex], getWhitePieces(), getBlackPieces());
+		Bishops blackBishops = new Bishops(Colour.BLACK, bishopBoard[blackIndex], getBlackPieces(), getWhitePieces());
+		Bishops bishops = isWhiteToMove() ? whiteBishops : blackBishops;
 		moves.append(bishops.findAllMoves(this));
-		Queens whiteQueens = new Queens(Colour.WHITE,queensBoard[whiteIndex],getWhitePieces(),getBlackPieces());
-		Queens blackQueens = new Queens(Colour.BLACK,queensBoard[blackIndex],getBlackPieces(),getWhitePieces());
-		Queens queens = isWhiteToMove()?whiteQueens:blackQueens;
+		Queens whiteQueens = new Queens(Colour.WHITE, queensBoard[whiteIndex], getWhitePieces(), getBlackPieces());
+		Queens blackQueens = new Queens(Colour.BLACK, queensBoard[blackIndex], getBlackPieces(), getWhitePieces());
+		Queens queens = isWhiteToMove() ? whiteQueens : blackQueens;
 		moves.append(queens.findAllMoves(this));
-String legalMoves = legalMoves(moveToAlgebra(moves.toString()));
+		String legalMoves = legalMoves(moveToAlgebra(moves.toString()));
 		return legalMoves;
 	}
 
 	private String legalMoves(String moves) {
-		String legal="";
-		for (int i = 0; i < moves.length(); i+=4) {
+		String legal = "";
+		for (int i = 0; i < moves.length(); i += 4) {
 			String move = moves.substring(i, i + 4);
 			long tmpDestination = lastMoveDestination;
 			long tmpStart = lastMoveStart;
+			String before = this.toString();
 			makeMove(move);
-			long king = kingBoard[isWhiteToMove() ? blackIndex:whiteIndex];
-			long unsafe = !isWhiteToMove()?getWhiteKing().unsafeForWhite(this):getBlackKing().unsafeForBlack(this);
-			if ((king & unsafe)==0L) {
-				legal+= move;
+			long king = kingBoard[isWhiteToMove() ? blackIndex : whiteIndex];
+			long unsafe = !isWhiteToMove() ? getWhiteKing().unsafeForWhite(this) : getBlackKing().unsafeForBlack(this);
+			if ((king & unsafe) == 0L) {
+				legal += move;
 			} else {
 			}
 			undoMove();
-			lastMoveDestination= tmpDestination;
-			lastMoveStart=tmpStart ;
+			String after = this.toString();
+			if (!before.equals(after)) {
+				logger.error("Innan felet: " + move);
+
+				logger.error(before);
+
+				logger.error(after);
+				//throw new RuntimeException("Fel i undo();");
+			}
+
+			lastMoveDestination = tmpDestination;
+			lastMoveStart = tmpStart;
 
 		}
 		return legal;
@@ -100,42 +111,57 @@ String legalMoves = legalMoves(moveToAlgebra(moves.toString()));
 
 	public void makeMove(String move) {
 
-if(lastMoveStart != -1L) {
-	olderMoves.push(lastMoveStart);
-	olderMoves.push(lastMoveDestination);
-}
+		if (lastMoveStart != -1L) {
+			olderMoves.push(lastMoveStart);
+			olderMoves.push(lastMoveDestination);
+			olderMoves.push(captured);
+		}
 
-			lastMoveDestination = algebraToBoard(move.substring(2, 4));
+		lastMoveDestination = algebraToBoard(move.substring(2, 4));
 		lastMoveStart = algebraToBoard(move.substring(0, 2));
-		boolean successs = whiteToMove ? movePieces(lastMoveStart,whiteIndex) : movePieces(lastMoveStart,blackIndex);
+		boolean successs = whiteToMove ? movePieces(lastMoveStart, whiteIndex) : movePieces(lastMoveStart, blackIndex);
+		capture(whiteToMove ? blackIndex : whiteIndex);
 		if (successs)
 			whiteToMove = !whiteToMove;
 	}
 
-/*	private boolean capture() {
-		if ((pawnBoard[blackIndex] & lastMoveDestination) != 0L) {
+	private boolean capture(int toMove) {
+		if ((pawnBoard[toMove] & lastMoveDestination) != 0L) {
 //			pawnBoard[colourToMove] ^= lastMoveStart;
-			pawnBoard[blackIndex] ^= lastMoveDestination;
+			captured = pawnBoard[toMove];
+			pawnBoard[toMove] ^= lastMoveDestination;
+		} else if ((rookBoard[toMove] & lastMoveDestination) != 0L) {
+			captured = rookBoard[toMove];
+			rookBoard[toMove] ^= lastMoveDestination;
+		} else if ((knightBoard[toMove] & lastMoveDestination) != 0L) {
+			captured = knightBoard[toMove] ;
+			knightBoard[toMove] ^= lastMoveDestination;
+		} else if ((bishopBoard[toMove] & lastMoveDestination) != 0L) {
+			captured = bishopBoard[toMove] ;
+			bishopBoard[toMove] ^= lastMoveDestination;
+		} else if ((queensBoard[toMove] & lastMoveDestination) != 0L) {
+			captured = queensBoard[toMove] ;
+			queensBoard[toMove] ^= lastMoveDestination;
 		}
 		return true;
-	}*/
+	}
 
 	private boolean movePieces(final long checkAgainst, int colourToMove) {
 		if ((pawnBoard[colourToMove] & checkAgainst) != 0L) {
 			pawnBoard[colourToMove] ^= lastMoveStart;
 			pawnBoard[colourToMove] ^= lastMoveDestination;
 		} else if ((rookBoard[colourToMove] & checkAgainst) != 0L) {
-			rookBoard[colourToMove] ^=lastMoveStart;
-			rookBoard[colourToMove] ^=lastMoveDestination;
+			rookBoard[colourToMove] ^= lastMoveStart;
+			rookBoard[colourToMove] ^= lastMoveDestination;
 		} else if ((knightBoard[colourToMove] & checkAgainst) != 0L) {
 			knightBoard[colourToMove] ^= lastMoveStart;
 			knightBoard[colourToMove] ^= lastMoveDestination;
 		} else if ((bishopBoard[colourToMove] & checkAgainst) != 0L) {
-			bishopBoard[colourToMove]^= lastMoveStart;
-			bishopBoard[colourToMove]^= lastMoveDestination;
+			bishopBoard[colourToMove] ^= lastMoveStart;
+			bishopBoard[colourToMove] ^= lastMoveDestination;
 		} else if ((queensBoard[colourToMove] & checkAgainst) != 0L) {
 			queensBoard[colourToMove] ^= lastMoveStart;
-			queensBoard[colourToMove]^= lastMoveDestination;
+			queensBoard[colourToMove] ^= lastMoveDestination;
 		} else if ((kingBoard[colourToMove] & checkAgainst) != 0L) {
 			kingBoard[colourToMove] ^= lastMoveStart;
 			kingBoard[colourToMove] ^= lastMoveDestination;
@@ -144,11 +170,26 @@ if(lastMoveStart != -1L) {
 	}
 
 	public void undoMove() {
-		boolean successs = whiteToMove ?  movePieces(lastMoveDestination,blackIndex) : movePieces(lastMoveDestination,whiteIndex);
+		//logger.debug("lastMoveDestination: {}", lastMoveDestination);
+		//logger.debug("lastMoveStart: {}", lastMoveStart);
+		boolean successs = whiteToMove ? movePieces(lastMoveDestination, blackIndex) : movePieces(lastMoveDestination, whiteIndex);
+		if (captured != 0L) {
+
+
+
+
+
+
+			pawnBoard[whiteToMove ? blackIndex : whiteIndex]=captured;
+			//capture(whiteToMove ? blackIndex : whiteIndex);
+			captured = 0L;
+		}
+
 		if (successs) {
 			if (!olderMoves.isEmpty()) {
-				lastMoveDestination=olderMoves.pop();
-				lastMoveStart=olderMoves.pop();
+				captured = olderMoves.pop();
+				lastMoveDestination = olderMoves.pop();
+				lastMoveStart = olderMoves.pop();
 			}
 			whiteToMove = !whiteToMove;
 
@@ -180,13 +221,13 @@ if(lastMoveStart != -1L) {
 
 	public long getEmpty() {
 //		if (hasMoved)
-			EMPTY = ~(getWhitePieces() | getBlackPieces());
+		EMPTY = ~(getWhitePieces() | getBlackPieces());
 		return EMPTY;
 	}
 
 	public long getOccupied() {
 //		if (hasMoved)
-			OCCUPIED = (getWhitePieces() | getBlackPieces());
+		OCCUPIED = (getWhitePieces() | getBlackPieces());
 		return OCCUPIED;
 	}
 
@@ -355,9 +396,10 @@ if(lastMoveStart != -1L) {
 	}
 
 	public Kings getWhiteKing() {
-		return new Kings(Colour.WHITE,kingBoard[whiteIndex],getWhitePieces(),getBlackPieces());
+		return new Kings(Colour.WHITE, kingBoard[whiteIndex], getWhitePieces(), getBlackPieces());
 	}
+
 	public Kings getBlackKing() {
-		return new Kings(Colour.BLACK,kingBoard[blackIndex],getBlackPieces(),getWhitePieces());
+		return new Kings(Colour.BLACK, kingBoard[blackIndex], getBlackPieces(), getWhitePieces());
 	}
 }

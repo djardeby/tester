@@ -104,42 +104,42 @@ public class BoardGenerator {
 		}
 		public  Board importFEN(String fenString) {
 			//not chess960 compatible
-			board.WP=0; board.WN=0; board.WB=0;
-			board.WR=0; board.WQ=0; board.WK=0;
-			board.BP=0; board.BN=0; board.BB=0;
-			board.BR=0; board.BQ=0; board.BK=0;
-			board.CWK=false; board.CWQ=false;
-			board.CBK=false; board.CBQ=false;
+//			board.WP=0; board.WN=0; board.WB=0;
+//			board.WR=0; board.WQ=0; board.WK=0;
+//			board.BP=0; board.BN=0; board.BB=0;
+//			board.BR=0; board.BQ=0; board.BK=0;
+//			board.CWK=false; board.CWQ=false;
+//			board.CBK=false; board.CBQ=false;
 			int charIndex = 0;
 			int boardIndex = 0;
 			while (fenString.charAt(charIndex) != ' ')
 			{
 				switch (fenString.charAt(charIndex++))
 				{
-					case 'P': board.WP |= (1L << boardIndex++);
+/*					case 'P': board.WP |= (1L << boardIndex++);
 						break;
-					case 'p': board.BP |= (1L << boardIndex++);
+//					case 'p': board.BP |= (1L << boardIndex++);
 						break;
-					case 'N': board.WN |= (1L << boardIndex++);
+//					case 'N': board.WN |= (1L << boardIndex++);
 						break;
-					case 'n': board.BN |= (1L << boardIndex++);
+//					case 'n': board.BN |= (1L << boardIndex++);
 						break;
-					case 'B': board.WB |= (1L << boardIndex++);
+//					case 'B': board.WB |= (1L << boardIndex++);
 						break;
-					case 'b': board.BB |= (1L << boardIndex++);
+//					case 'b': board.BB |= (1L << boardIndex++);
 						break;
-					case 'R': board.WR |= (1L << boardIndex++);
+//					case 'R': board.WR |= (1L << boardIndex++);
 						break;
-					case 'r': board.BR |= (1L << boardIndex++);
+//					case 'r': board.BR |= (1L << boardIndex++);
 						break;
-					case 'Q': board.WQ |= (1L << boardIndex++);
+//					case 'Q': board.WQ |= (1L << boardIndex++);
 						break;
-					case 'q': board.BQ |= (1L << boardIndex++);
+//					case 'q': board.BQ |= (1L << boardIndex++);
 						break;
-					case 'K': board.WK |= (1L << boardIndex++);
+//					case 'K': board.WK |= (1L << boardIndex++);
 						break;
-					case 'k': board.BK |= (1L << boardIndex++);
-						break;
+//					case 'k': board.BK |= (1L << boardIndex++);
+						break;*/
 					case '/':
 						break;
 					case '1': boardIndex++;
@@ -162,7 +162,7 @@ public class BoardGenerator {
 						break;
 				}
 			}
-			board.setWhiteToMove(fenString.charAt(++charIndex) == 'w');
+	//		board.setWhiteToMove(fenString.charAt(++charIndex) == 'w');
 			charIndex += 2;
 			while (fenString.charAt(charIndex) != ' ')
 			{
@@ -170,14 +170,14 @@ public class BoardGenerator {
 				{
 					case '-':
 						break;
-					case 'K': board.CWK = true;
+	/*				case 'K': board.CWK = true;
 						break;
-					case 'Q': board.CWQ = true;
+	//				case 'Q': board.CWQ = true;
 						break;
-					case 'k': board.CBK = true;
+	//				case 'k': board.CBK = true;
 						break;
-					case 'q': board.CBQ = true;
-						break;
+	//				case 'q': board.CBQ = true;
+						break;*/
 					default:
 						break;
 				}
@@ -222,10 +222,10 @@ public class BoardGenerator {
 				}
 			}
 
-			board.WP=WP; board.WN=WN; board.WB=WB;
-			board.WR=WR; board.WQ=WQ; board.WK=WK;
-			board.BP=BP; board.BN=BN; board.BB=BB;
-			board.BR=BR; board.BQ=BQ; board.BK=BK;
+//			board.WP=WP; board.WN=WN; board.WB=WB;
+//			board.WR=WR; board.WQ=WQ; board.WK=WK;
+//			board.BP=BP; board.BN=BN; board.BB=BB;
+//			board.BR=BR; board.BQ=BQ; board.BK=BK;
 			return board;
 		}
 		public  long convertStringToBitboard(String Binary) {
