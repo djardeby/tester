@@ -26,7 +26,8 @@ public class StandardBoard implements Board {
 	private long lastMoveStart = -1L;
 	private long lastMoveDestination = -1L;
 	private Stack<Long> olderMoves = new Stack<>();
-	private long captured = 0L;
+	private Stack<Character> olderCaptures = new Stack<>();
+	private char captured = '-';
 
 	public StandardBoard() {
 
@@ -86,7 +87,7 @@ public class StandardBoard implements Board {
 			String before = this.toString();
 			makeMove(move);
 			long king = kingBoard[isWhiteToMove() ? blackIndex : whiteIndex];
-			long unsafe = !isWhiteToMove() ? getWhiteKing().unsafeForWhite(this) : getBlackKing().unsafeForBlack(this);
+			long unsafe = !isWhiteToMove() ? getWhiteKing().attackedByWhite(this) : getBlackKing().attackedByBlack(this);
 			if ((king & unsafe) == 0L) {
 				legal += move;
 			} else {
@@ -94,12 +95,10 @@ public class StandardBoard implements Board {
 			undoMove();
 			String after = this.toString();
 			if (!before.equals(after)) {
-				logger.error("Innan felet: " + move);
-
 				logger.error(before);
-
+				logger.error("Innan felet: " + move);
 				logger.error(after);
-				//throw new RuntimeException("Fel i undo();");
+				throw new RuntimeException("Fel i undo();");
 			}
 
 			lastMoveDestination = tmpDestination;
@@ -114,7 +113,7 @@ public class StandardBoard implements Board {
 		if (lastMoveStart != -1L) {
 			olderMoves.push(lastMoveStart);
 			olderMoves.push(lastMoveDestination);
-			olderMoves.push(captured);
+			olderCaptures.push(captured);
 		}
 
 		lastMoveDestination = algebraToBoard(move.substring(2, 4));
@@ -128,20 +127,25 @@ public class StandardBoard implements Board {
 	private boolean capture(int toMove) {
 		if ((pawnBoard[toMove] & lastMoveDestination) != 0L) {
 //			pawnBoard[colourToMove] ^= lastMoveStart;
-			captured = pawnBoard[toMove];
+			captured = toMove==0?'P':'p';
 			pawnBoard[toMove] ^= lastMoveDestination;
 		} else if ((rookBoard[toMove] & lastMoveDestination) != 0L) {
-			captured = rookBoard[toMove];
+			captured = toMove==0?'R':'r';
 			rookBoard[toMove] ^= lastMoveDestination;
 		} else if ((knightBoard[toMove] & lastMoveDestination) != 0L) {
-			captured = knightBoard[toMove] ;
+			captured = toMove==0?'N':'n';
 			knightBoard[toMove] ^= lastMoveDestination;
 		} else if ((bishopBoard[toMove] & lastMoveDestination) != 0L) {
-			captured = bishopBoard[toMove] ;
+			captured = toMove==0?'B':'b';
 			bishopBoard[toMove] ^= lastMoveDestination;
 		} else if ((queensBoard[toMove] & lastMoveDestination) != 0L) {
-			captured = queensBoard[toMove] ;
+			captured = toMove==0?'Q':'q';
 			queensBoard[toMove] ^= lastMoveDestination;
+		} else if ((kingBoard[toMove] & lastMoveDestination) != 0L) {
+			captured = toMove==0?'K':'k';
+			kingBoard[toMove] ^= lastMoveDestination;
+		} else {
+			captured='-';
 		}
 		return true;
 	}
@@ -173,21 +177,59 @@ public class StandardBoard implements Board {
 		//logger.debug("lastMoveDestination: {}", lastMoveDestination);
 		//logger.debug("lastMoveStart: {}", lastMoveStart);
 		boolean successs = whiteToMove ? movePieces(lastMoveDestination, blackIndex) : movePieces(lastMoveDestination, whiteIndex);
-		if (captured != 0L) {
+		if (captured != '-') {
+
+			switch (captured) {
+				case 'P':
+					pawnBoard[whiteIndex]^=lastMoveDestination;
+					break;
+				case 'R':
+					rookBoard[whiteIndex]^=lastMoveDestination;
+					break;
+				case 'N':
+					knightBoard[whiteIndex]^=lastMoveDestination;
+					break;
+				case 'B':
+					bishopBoard[whiteIndex]^=lastMoveDestination;
+					break;
+				case 'Q':
+					queensBoard[whiteIndex]^=lastMoveDestination;
+					break;
+				case 'K':
+					kingBoard[whiteIndex]^=lastMoveDestination;
+					break;
+				case 'p':
+					pawnBoard[blackIndex]^=lastMoveDestination;
+					break;
+				case 'r':
+					rookBoard[blackIndex]^=lastMoveDestination;
+					break;
+				case 'n':
+					knightBoard[blackIndex]^=lastMoveDestination;
+					break;
+				case 'b':
+					bishopBoard[blackIndex]^=lastMoveDestination;
+					break;
+				case 'q':
+					queensBoard[blackIndex]^=lastMoveDestination;
+					break;
+				case 'k':
+					kingBoard[blackIndex]^=lastMoveDestination;
+					break;
+				default:
+			}
 
 
 
 
-
-
-			pawnBoard[whiteToMove ? blackIndex : whiteIndex]=captured;
+			//captured;
 			//capture(whiteToMove ? blackIndex : whiteIndex);
-			captured = 0L;
+			captured = '-';
 		}
 
 		if (successs) {
 			if (!olderMoves.isEmpty()) {
-				captured = olderMoves.pop();
+				captured = olderCaptures.pop();
 				lastMoveDestination = olderMoves.pop();
 				lastMoveStart = olderMoves.pop();
 			}

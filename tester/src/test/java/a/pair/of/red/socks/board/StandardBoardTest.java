@@ -134,7 +134,7 @@ public class StandardBoardTest {
 					String beforeThirdMove=sut.toString();
 					sut.makeMove(thirdMove);
 					String thirdMoves = sut.moves();
-					logger.debug("{} {} - {}{}",firstMove,secondMove,thirdMove,sut.toString());
+					//logger.debug("{} {} - {}{}",firstMove,secondMove,thirdMove,sut.toString());
 					sut.undoMove();
 					assertEquals("Brädet ska alltid återställas.",beforeThirdMove,sut.toString());
 					numberOfMoves+=thirdMoves.length()/4;
@@ -153,6 +153,7 @@ public class StandardBoardTest {
 	@Test
 	public void perftPosition2() throws Exception {
 		sut = null;
+
 		sut = new StandardBoard();
 		sut.setBlackPawnBoard(137439478784L);
 		sut.setBlackRookBoard(2147483648L);
@@ -202,8 +203,12 @@ public class StandardBoardTest {
 		 sut = new StandardBoard();
 		sut.setBlackPawnBoard(4096L);
 		sut.setWhiteBishopBoard(549755813888L);
+		String before = sut.toString();
 		sut.makeMove("h4e7");
 		sut.undoMove();
+		String after = sut.toString();
+
 		logger.debug(sut.toString());
+		assertEquals("Undo ska återställa alla pjäser.", before,after);
 	}
 }

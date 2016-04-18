@@ -26,7 +26,7 @@ private static final Logger logger = LoggerFactory.getLogger(Kings.class);
 		long moveBoard = ((tmpBoard & ~FILE_H) << 1) | ((tmpBoard & ~FILE_A) >> 1);
 		tmpBoard |= moveBoard;
 		moveBoard |= (tmpBoard >> 8) | (tmpBoard << 8);
-		long attacks = moveBoard & ~getOwnPieces() & (Colour.WHITE.equals(colour)?~unsafeForWhite(board):~unsafeForBlack(board));
+		long attacks = moveBoard & ~getOwnPieces() & (Colour.WHITE.equals(colour)?~attackedByWhite(board):~attackedByBlack(board));
 		int index = Long.numberOfTrailingZeros(kingBoard);
 		int startFile = index%8;
 		int startRank = index/8;
@@ -34,7 +34,7 @@ private static final Logger logger = LoggerFactory.getLogger(Kings.class);
 		return newBoardToMoves(attacks,startSquare ).toString();
 	}
 
-	public long unsafeForBlack(StandardBoard board) {
+	public long attackedByBlack(StandardBoard board) {
 		long unsafe = ((board.getWhitePawnBoard() >>> 7) & ~FILE_A);
 		unsafe |= ((board.getWhitePawnBoard() >>> 9) & ~FILE_H);
 		long tmpBoard = board.getWhiteBishopBoard()|board.getWhiteQueenBoard();
@@ -69,7 +69,7 @@ private static final Logger logger = LoggerFactory.getLogger(Kings.class);
 		return unsafe;
 	}
 
-	public long unsafeForWhite(StandardBoard board) {
+	public long attackedByWhite(StandardBoard board) {
 		long unsafe = ((board.getBlackPawnBoard() << 9) & ~FILE_A);
 		unsafe |= ((board.getBlackPawnBoard() << 7) & ~FILE_H);
 		long tmpBoard = board.getBlackBishopBoard()|board.getBlackQueenBoard();
