@@ -1,5 +1,6 @@
 package a.pair.of.red.socks.board;
 
+import a.pair.of.red.socks.deletable.BoardGenerator;
 import a.pair.of.red.socks.factory.BoardFactory;
 import org.junit.After;
 import org.junit.Before;
@@ -19,7 +20,7 @@ public class StandardBoardTest {
 
 	@Before
 	public void setUp() throws Exception {
-		sut = (StandardBoard) BoardFactory.initBoard(BoardType.StandardBoard);
+		sut = BoardGenerator.importFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 
 	}
 
@@ -152,18 +153,11 @@ public class StandardBoardTest {
 	//https://chessprogramming.wikispaces.com/Perft+Results
 	@Test
 	public void perftPosition2() throws Exception {
-		sut = null;
+		sut = BoardGenerator.importFEN("8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - -");
 
-		sut = new StandardBoard();
-		sut.setBlackPawnBoard(137439478784L);
-		sut.setBlackRookBoard(2147483648L);
-		sut.setBlackKingBoard(549755813888L);
-		sut.setWhitePawnBoard(22517998170406912L);
-		sut.setWhiteRookBoard(8589934592L);
-		sut.setWhiteKingBoard(16777216L);
 		String moves = sut.moves();
 		//logger.debug("moves: {}",moves);
-		assertEquals("Felaktigt antal drag", (14), moves.length()/4);
+		assertEquals("Felaktigt antal drag" + sut.toString(), (14), moves.length()/4);
 		String moreMoves = "";
 		String beforeBoard=sut.toString();
 		for (int i = 0; i < moves.length(); i += 4) {

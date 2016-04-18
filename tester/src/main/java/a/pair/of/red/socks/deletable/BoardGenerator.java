@@ -8,7 +8,7 @@ import a.pair.of.red.socks.board.StandardBoard;
  * Created by djardeby on 2016-03-25.
  */
 public class BoardGenerator {
-	private final Board board;
+	private static StandardBoard board;
 
 	/*
 		* PIECE=WHITE/black
@@ -102,7 +102,8 @@ public class BoardGenerator {
 			chessBoard[7][counter]="R";
 			arrayToBitboards(chessBoard,WP,WN,WB,WR,WQ,WK,BP,BN,BB,BR,BQ,BK);
 		}
-		public  Board importFEN(String fenString) {
+		public  static StandardBoard importFEN(String fenString) {
+			board=new StandardBoard();
 			//not chess960 compatible
 //			board.WP=0; board.WN=0; board.WB=0;
 //			board.WR=0; board.WQ=0; board.WK=0;
@@ -116,30 +117,42 @@ public class BoardGenerator {
 			{
 				switch (fenString.charAt(charIndex++))
 				{
-/*					case 'P': board.WP |= (1L << boardIndex++);
+					case 'P':
+						board.setWhitePawnBoard( board.getWhitePawnBoard() | (1L << boardIndex++));
 						break;
-//					case 'p': board.BP |= (1L << boardIndex++);
+					case 'p':
+						board.setBlackPawnBoard(board.getBlackPawnBoard()|(1L << boardIndex++));
 						break;
-//					case 'N': board.WN |= (1L << boardIndex++);
+					case 'N':
+						board.setWhiteKnightBoard(board.getWhiteKnightBoard()|(1L << boardIndex++));
 						break;
-//					case 'n': board.BN |= (1L << boardIndex++);
+					case 'n':
+						board.setBlackKnightBoard(board.getBlackKnightBoard()|(1L << boardIndex++));
 						break;
-//					case 'B': board.WB |= (1L << boardIndex++);
+					case 'B':
+						board.setWhiteBishopBoard(board.getWhiteBishopBoard()|(1L << boardIndex++));
 						break;
-//					case 'b': board.BB |= (1L << boardIndex++);
+					case 'b':
+						board.setBlackBishopBoard(board.getBlackBishopBoard()|(1L << boardIndex++));
 						break;
-//					case 'R': board.WR |= (1L << boardIndex++);
+					case 'R':
+						board.setWhiteRookBoard(board.getWhiteRookBoard()|(1L << boardIndex++));
 						break;
-//					case 'r': board.BR |= (1L << boardIndex++);
+					case 'r':
+						board.setBlackRookBoard(board.getBlackRookBoard()|(1L << boardIndex++));
 						break;
-//					case 'Q': board.WQ |= (1L << boardIndex++);
+					case 'Q':
+						board.setWhiteQueenBoard(board.getWhiteQueenBoard()|(1L << boardIndex++));
 						break;
-//					case 'q': board.BQ |= (1L << boardIndex++);
+					case 'q':
+						board.setBlackQueenBoard(board.getBlackQueenBoard()|(1L << boardIndex++));
 						break;
-//					case 'K': board.WK |= (1L << boardIndex++);
+					case 'K':
+						board.setWhiteKingBoard(board.getWhiteKingBoard()|(1L << boardIndex++));
 						break;
-//					case 'k': board.BK |= (1L << boardIndex++);
-						break;*/
+					case 'k':
+						board.setBlackKingBoard(board.getBlackKingBoard()|(1L << boardIndex++));
+						break;
 					case '/':
 						break;
 					case '1': boardIndex++;
@@ -162,21 +175,21 @@ public class BoardGenerator {
 						break;
 				}
 			}
-	//		board.setWhiteToMove(fenString.charAt(++charIndex) == 'w');
+			board.setWhiteToMove(fenString.charAt(++charIndex) == 'w');
 			charIndex += 2;
 			while (fenString.charAt(charIndex) != ' ')
 			{
 				switch (fenString.charAt(charIndex++))
 				{
-					case '-':
+					/*					case '-':
 						break;
-	/*				case 'K': board.CWK = true;
+					case 'K': board.CWK = true;
 						break;
-	//				case 'Q': board.CWQ = true;
+					case 'Q': board.CWQ = true;
 						break;
-	//				case 'k': board.CBK = true;
+					case 'k': board.CBK = true;
 						break;
-	//				case 'q': board.CBQ = true;
+					case 'q': board.CBQ = true;
 						break;*/
 					default:
 						break;
@@ -184,7 +197,7 @@ public class BoardGenerator {
 			}
 			if (fenString.charAt(++charIndex) != '-')
 			{
-//				board.EP = Moves.FileMasks8[fenString.charAt(charIndex++) - 'a'];
+				//board.EP = Moves.FileMasks8[fenString.charAt(charIndex++) - 'a'];
 			}
 			//the rest of the fenString is not yet utilized
 			return board;
